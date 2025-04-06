@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import resumeModel from "@/models/resume.model"
 import generativeModel from "@/lib/gemini";
 import dbConnect from "@/lib/mongodb";
+import mongoose from "mongoose";
 export async function saveResume(content: string) {
     await dbConnect()
     const { userId } = await auth();
@@ -20,7 +21,8 @@ export async function saveResume(content: string) {
             },
             {
                 $set: {
-                    content
+                    content,
+                    userId:new mongoose.Types.ObjectId(user._id)
                 }
             },
             {new:true,upsert:true} // upsert use to create a new document if it doesn't exist

@@ -1,6 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, Download, Edit, Loader2, Monitor, Save } from 'lucide-react'
+import { AlertTriangle, CirclePause, Download, Edit, Loader2, Mic, Monitor, Pause, Save } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useFetch } from '@/hooks/user-fetch'
@@ -22,10 +22,10 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   const { user } = useUser();
   const [activeTab, setActiveTab] = React.useState('edit');
   const [resumeMode, setResumeMode] = React.useState<'edit' | 'preview'>('edit');
-
+  const [recognitionBtnColor, setRecognitionBtnColor] = React.useState<'destructive' | 'secondary'>('secondary');
   const [previewContent, setPreviewContent] = useState<string>(initialResumeContent || '');
   const [isGenrating, setIsGenerating] = React.useState(false);
-  
+  let recognition: any = null;
   const {
     loading: isResuming,
     data: resumeData,
@@ -37,7 +37,6 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     control,
     handleSubmit,
     watch,
-    
     setValue,
     register, 
     formState: { errors }
@@ -143,6 +142,46 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
       setIsGenerating(false);
     }
   }
+
+
+
+
+  const handleSpeechRecognition = () => {
+    if (typeof window !== "undefined" && window.hasOwnProperty("webkitSpeechRecognition")) {
+      if (!recognition) {
+        const SpeechRecognition =
+          (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+  
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0].transcript)
+            .join("");
+            console.log(transcript)
+            setValue('summary',transcript)
+        };
+  
+        recognition.onend = () => {
+          console.log("Speech recognition ended.");
+          setRecognitionBtnColor('secondary');
+        };
+      }
+  
+      setRecognitionBtnColor('destructive');
+      recognition.start();
+    }
+  };
+  
+  const stopRecognition = () => {
+    if (recognition) {
+      setRecognitionBtnColor('destructive');
+      recognition.stop(); 
+    }
+  };
+  
   
   // Helper function to load html2pdf.js
   // const loadHTML2PDF = (): Promise<void> => {
@@ -300,11 +339,19 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
                 name='summary'
                 control={control}
                 render={({ field }) => (
-                  <Textarea
+                  <div className='relative'>
+                    <Button type='button'onClick={handleSpeechRecognition}  variant={recognitionBtnColor} size={'icon'} className='cursor-pointer absolute bottom-2 right-2'>
+                      {
+                        recognitionBtnColor === "secondary" ?  <Mic className='h-5 w-5'/> :   <CirclePause onClick={stopRecognition} className='h-5 w-5'/>
+                      }
+                    
+                    </Button>
+                    <Textarea
                     {...field}
                     placeholder="Write a brief summary of your professional background and career goals."
-                    className='h-32'
+                    className='h-32 resize-none '
                   ></Textarea>
+                  </div>
                 )}
               />
               {errors.summary && (
