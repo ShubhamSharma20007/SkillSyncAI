@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillSync - AI Career Coach",
-  description: "SkillSync - AI Career Coach",
+  title: "SkillSynx - AI Career Coach",
+  description: "SkillSynx - AI Career Coach",
 };
 
 export default async  function RootLayout({
