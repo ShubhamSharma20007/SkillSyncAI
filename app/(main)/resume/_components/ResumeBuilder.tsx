@@ -18,6 +18,7 @@ import { useUser } from '@clerk/nextjs'
 import { jsPDF } from "jspdf";
 import html2pdf from 'html2pdf.js'
 import { toast } from 'sonner'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialContent?: string }) => {
   const { user } = useUser();
   const [activeTab, setActiveTab] = React.useState('edit');
@@ -25,6 +26,13 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   const [recognitionBtnColor, setRecognitionBtnColor] = React.useState<'destructive' | 'secondary'>('secondary');
   const [previewContent, setPreviewContent] = useState<string>(initialResumeContent || '');
   const [isGenrating, setIsGenerating] = React.useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
   let recognition: any = null;
   const {
     loading: isResuming,
@@ -38,6 +46,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     handleSubmit,
     watch,
     setValue,
+    getValues,
     register, 
     formState: { errors }
   } = useForm({
@@ -147,41 +156,26 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
 
 
   const handleSpeechRecognition = () => {
-    if (typeof window !== "undefined" && window.hasOwnProperty("webkitSpeechRecognition")) {
-      if (!recognition) {
-        const SpeechRecognition =
-          (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "en-US";
-  
-        recognition.onresult = (event: any) => {
-          const transcript = Array.from(event.results)
-            .map((result: any) => result[0].transcript)
-            .join("");
-            console.log(transcript)
-            setValue('summary',transcript)
-        };
-  
-        recognition.onend = () => {
-          console.log("Speech recognition ended.");
-          setRecognitionBtnColor('secondary');
-        };
-      }
-  
+    if(recognitionBtnColor === 'secondary'){
+      SpeechRecognition.startListening({
+        continuous:true,
+        language: 'en-US'
+      });
       setRecognitionBtnColor('destructive');
-      recognition.start();
     }
+    else{
+      SpeechRecognition.stopListening();
+      setRecognitionBtnColor('secondary');
+    }
+
   };
   
-  const stopRecognition = () => {
-    if (recognition) {
-      setRecognitionBtnColor('destructive');
-      recognition.stop(); 
+
+  useEffect(() => {
+    if (transcript) {
+      setValue('summary',transcript);
     }
-  };
-  
+  }, [transcript]);
   
   // Helper function to load html2pdf.js
   // const loadHTML2PDF = (): Promise<void> => {
@@ -215,6 +209,10 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     console.log("Editor value changed:", value);
     setPreviewContent(value || '');
   };
+
+  if (!browserSupportsSpeechRecognition) {
+    return toast.error('Your browser does not support speech recognition.');
+  }
 
 
   return (
@@ -342,8 +340,9 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
                   <div className='relative'>
                     <Button type='button'onClick={handleSpeechRecognition}  variant={recognitionBtnColor} size={'icon'} className='cursor-pointer absolute bottom-2 right-2'>
                       {
-                        recognitionBtnColor === "secondary" ?  <Mic className='h-5 w-5'/> :   <CirclePause onClick={stopRecognition} className='h-5 w-5'/>
+                        recognitionBtnColor === "secondary" ?  <Mic className='h-5 w-5'/> : <CirclePause className='h-5 w-5'/>
                       }
+
                     
                     </Button>
                     <Textarea

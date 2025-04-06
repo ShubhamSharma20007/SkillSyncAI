@@ -6,7 +6,7 @@ export default function ResumeLayout({children}:{children:React.ReactNode}){
            <Suspense
         fallback={
           <div className="flex justify-center items-center h-64">
-            <BarLoader color="gray"  width={'50%'} loading={true}/>
+            <BarLoader color="gray"  width={'50%'} loading={true} />
           </div>
         }
       >
