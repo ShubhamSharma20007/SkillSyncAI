@@ -14,25 +14,23 @@ export async function updateUser(data:any){
     const user = await userModel.findOne({ clerkUserId: userId });
     if (!user) throw new Error("User not found");
     try {
-        let industryInsights = false
-        let insights;
+   
         // let industryInsights = await industryInsightModel.findOne({
         //     industry: data.industry
         // });
 
-        if (!industryInsights) {
-             insights = await generateAIInsights(data.industry);
-            industryInsights = await industryInsightModel.create({
+            const  insights = await generateAIInsights(data.industry);
+           const industryInsights = await industryInsightModel.create({
                 industry: data.industry,
                 ...insights as any,
+                userId: new mongoose.Types.ObjectId(user._id),
                 nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
             });
-        }
-
+      
         const updatedUser = await userModel.findByIdAndUpdate(
             user._id, 
-            {
-                industry: data.industry,
+            {   
+                industry: new mongoose.Types.ObjectId(industryInsights._id),
                 experience: data.experience,
                 bio: data.bio,
                 skills: data.skills,
@@ -58,17 +56,13 @@ export async function getUserOnboardingStatus(){
         const user = await userModel.findOne({
             clerkUserId:userId
         }).populate('industry');
-
-
         return {
-            isOnboarded: Boolean(user?.industry),
+            isOnboarded: Boolean(user.industry?._id),
         };
-    } catch (error) {
-        throw new Error("Error getting user onboarding status");
+    } catch (error:any) {
+        throw new Error("Error getting user onboarding status",error.message|| error);
     }
 }
-
-
 
 export async function createUser(user:any) {
     try {

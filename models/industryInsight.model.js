@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const IndustrySchema = new mongoose.Schema({
     industry:String,
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
     salaryRanges:{
         type:Object
     },

@@ -12,6 +12,7 @@ export  async function generateQuiz(){
     await dbConnect();
     const user = await userModel.findOne({ clerkUserId: userId });
     if (!user) throw new Error("User not found");
+    if(!user.industry) throw new Error("Industry not found");
 
 try {
         

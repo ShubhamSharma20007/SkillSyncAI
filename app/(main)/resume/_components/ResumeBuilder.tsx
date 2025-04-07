@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, CirclePause, Download, Edit, Loader2, Mic, Monitor, Pause, Save } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useFetch } from '@/hooks/user-fetch'
 import { saveResume } from '@/services/resume'
@@ -153,23 +153,46 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   }
 
 
+  let timer = useRef<NodeJS.Timeout | null>(null);
 
-
+  const startInactivityTimer = () => {
+    console.log("Timer started");
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      SpeechRecognition.stopListening();
+      setRecognitionBtnColor('secondary');
+    }, 1000 * 10);
+  };
+  
+  const clearInactivityTimer = () => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+  };
+  
   const handleSpeechRecognition = () => {
-    if(recognitionBtnColor === 'secondary'){
+    if (recognitionBtnColor === 'secondary') {
       SpeechRecognition.startListening({
-        continuous:true,
+        continuous: true,
         language: 'en-US'
       });
       setRecognitionBtnColor('destructive');
-    }
-    else{
+      startInactivityTimer()
+    } else {
+      clearInactivityTimer(); 
       SpeechRecognition.stopListening();
       setRecognitionBtnColor('secondary');
     }
-
   };
   
+  useEffect(() => {
+    if (recognitionBtnColor === 'destructive' && transcript) {
+      startInactivityTimer();
+    }
+  }, [transcript]);
 
   useEffect(() => {
     if (transcript) {

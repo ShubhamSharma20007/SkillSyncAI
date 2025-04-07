@@ -1,11 +1,19 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-    clerkUserId: String,
+    clerkUserId:{
+        type:String,
+        ref:'User',
+        required:true
+    },
     email: String,
     name: String,
     imageUrl: String,
-    industry: String,
+    industry: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Industry',
+        required:true
+    },
     bio: String,
     experience: String,
     skills:[String]

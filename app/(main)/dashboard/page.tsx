@@ -13,6 +13,10 @@ export default async function IndustryInsights() {
     }
   return (
    <div className='container mx-auto'>
+      <div className="flex justify-between items-center mb-5">
+            <h1 className="text-6xl gradient-title font-bold">Dashboard</h1>
+        </div>
+    
     <DashboardView insights={insights}/>
    </div>
   )

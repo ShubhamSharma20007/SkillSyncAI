@@ -53,9 +53,7 @@ export async function getIndustryInsights(){
       //     return industryInsight
       //   }
       //   return user.industryInsight;
-      const industryInsight = await industryInsightModel.findOne({
-        industry:user.industry
-      })
+      const industryInsight = await industryInsightModel.findById(user.industry?._id)
       return JSON.parse(JSON.stringify(industryInsight))
     } catch (error) {
       console.log(error)
