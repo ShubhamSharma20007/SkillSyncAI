@@ -32,7 +32,7 @@ export const contactSchema = z.object({
   email:z.string().email({
     message:'Email is required'
   }),
-  mobile:z.string().min(10).max(10).optional(),
+  mobile:z.string().min(10).max(12).optional(),
   linkedin:z.string().optional(),
   twitter:z.string().optional(),
 })
