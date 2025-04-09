@@ -47,7 +47,6 @@ export async function updateUser(data:any){
 }
 
 export async function getUserOnboardingStatus(){
-
     const { userId } = await auth(); 
     if(!userId) throw new Error("id not found");
 
@@ -88,5 +87,40 @@ export async function createUser(user:any) {
     console.log(error);
     throw new Error("Error creating user",error.message || error);
     
+    }
+}
+
+export const getUser = async() => {
+    try {
+    const { userId } = await auth();  
+    if (!userId) throw new Error("id not found");
+    await dbConnect();
+    const user = await userModel.findOne({ clerkUserId: userId }).populate('industry').lean();
+    if (!user) throw new Error("User not found");
+    return JSON.parse(JSON.stringify(user));
+    } catch (error:any) {
+        console.log(error);
+        throw new Error("Error getting user",error.message || error);
+    }
+}
+
+export const updateUserDetails = async (data: any,formatedIndustry:string) => {
+    console.log(data)
+    try {
+        const { userId } = await auth();  
+        if (!userId) throw new Error("id not found");
+        await dbConnect();
+        const updatedUser = await userModel.findOneAndUpdate(
+            { clerkUserId: userId },
+            { $set: data ,
+            industry:formatedIndustry
+            },
+            { new: true }
+        );
+        if (!updatedUser) throw new Error("User not found");
+        return true
+    } catch (error: any) {
+        console.log(error);
+        throw new Error("Error updating user", error.message || error);
     }
 }

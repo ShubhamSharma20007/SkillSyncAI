@@ -6,11 +6,6 @@ import { Button } from "@/components/ui/button";
 import { getCoverLetter } from "@/services/cover-letter";
 import CoverLetterPreview from "../_components/CoverLetterPreview";
 
-type PageParams = {
-  params: {
-    id: string;
-  };
-};
 
 export default async function EditCoverLetterPage({ params }:  {params: Promise<{ id: string }>}) {
   const { id } = await params;

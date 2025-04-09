@@ -103,7 +103,6 @@ const OnBoardingForm: React.FC<IndustriesInterface> = ({ industries }) => {
                   {
                     industries.map((industry, idx) => <SelectItem value={industry.id} key={idx}>{industry.name}</SelectItem>)
                   }
-
                 </SelectContent>
               </Select>
               {
