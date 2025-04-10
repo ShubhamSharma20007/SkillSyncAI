@@ -60,7 +60,6 @@ export default async function saveQuizResult(questions:QuestionInterface[],answe
       questionExplanation: question.explanation || "",
       userAnswer: answers[index],
       isCorrect: answers[index] === question.correctAnswer,
-    
     }));
     
    

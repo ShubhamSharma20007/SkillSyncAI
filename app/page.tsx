@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { currentUser } from '@clerk/nextjs/server'
 import { createUser } from "@/services/user";
+
 export default async function Home() {
  const user =await currentUser();
  if(user){

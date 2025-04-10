@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
 
-
-
-
 const AssessmentSchema = new mongoose.Schema({
     quizScore: Number,
     questions: [{
@@ -24,6 +21,10 @@ const AssessmentSchema = new mongoose.Schema({
     userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    isCustomInterview:{
+      type:Boolean,
+      default:false
     },
 }, {
     timestamps: true,

@@ -68,3 +68,20 @@ export const coverLetterSchema = z.object({
   jobTitle:z.string().min(1, "Job title is required"),
   jobDescription: z.string().min(5, "Job description is required and should be at least 10 characters long"),
 })
+
+export const customInterviewValidation=z.object({
+  difficultyLevel:z.string().min(1, "Difficulty level is required"),
+  questionCount:z.number().min(10, "Question should be at least 10 and maxiumum 25"),
+  skills: z.string().min(1, "Skills is required").transform((val) =>
+    val
+      ? val
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter(Boolean)
+      : undefined
+  ),
+  isTimer:z.optional(z.boolean()),
+  experienceLevel:z.string().min(1, "Experience level is required"),
+  timerValue: z.string().optional(),
+  language:z.string().optional()
+})
