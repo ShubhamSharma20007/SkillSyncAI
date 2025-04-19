@@ -15,15 +15,16 @@ const handler = app.getRequestHandler();
 app.prepare().then(() => {
   const httpServer = createServer(handler);
   const io = new Server(httpServer,{
-    transports: ['websocket', 'polling'] ,
-  
-   
+    cors:{
+      origin:'*'
+    }
   });
   let threadMap = new Map()
   io.on('connection', async (socket) => {
-    console.log('a user connected',socket.id)
+    console.log('Client connected:', socket.id);
+
     socket.on('chat_message', async ({msg,user}) => {
-      console.log('Message received:',msg,user)
+
       const userDets = await getThreadId(user)
       if (userDets !== false) {
         if (
@@ -70,6 +71,7 @@ app.prepare().then(() => {
       const stream = await aiModel.beta.threads.runs.stream(thread, {
         assistant_id: process.env.NEXT_PUBLIC_ASSISTANT_ID,
         stream: true,
+
       });
 
       stream.on('textDelta', (textDelta) => {
