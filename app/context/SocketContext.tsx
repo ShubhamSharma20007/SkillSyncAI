@@ -7,6 +7,7 @@ import { useAuth } from '@clerk/nextjs';
 type MessageType = {
   role: string,
   content: string,
+  createdAt?: string|Date,
 }
 
 interface MessageContextType {
@@ -31,7 +32,8 @@ const SocketContext = createContext<MessageContextType>({
 });
 const URL ={
   production:'https://skillsynx-socket-backend-1.onrender.com',
-  development:'http://localhost:3000'
+  development:'http://localhost:4000'
+  // 'http://localhost:4000' // socket server url
 } as const
 
 const env = (process.env.NODE_ENV ?? 'development') as keyof typeof URL;
