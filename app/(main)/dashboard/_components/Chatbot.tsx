@@ -50,7 +50,7 @@ const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
         )}
       </Toggle>
       {
-        // visible && <ChatBotComponent setVisible={setVisible} visible={visible} />
+        visible && <ChatBotComponent setVisible={setVisible} visible={visible} />
       }
 
     </>
