@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useFetch } from '@/hooks/user-fetch';
-import { storeChats } from '@/services/ai-chats';
 import { useAuth } from '@clerk/nextjs';
 type MessageType = {
   role: string,

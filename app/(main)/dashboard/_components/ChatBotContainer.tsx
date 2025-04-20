@@ -25,7 +25,8 @@ import { useSocket } from "@/app/context/SocketContext"
 import { useForm } from "react-hook-form"
 import Loader from "@/components/Loader"
 import { useUser } from "@clerk/nextjs";
-
+import Lottie from 'react-lottie';
+import * as animationData from '../../../../lottie/emptyChat.json'
 type VisibityDispatcherProps = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>,
   visible: boolean
@@ -99,7 +100,15 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
     )
   }
 
-
+  const defaultOptions = {
+    loop: true,
+    autoplay: true, 
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    
+    }
+  };
 
   // React.useLayoutEffect(()=>{
   //     let messagesArray = [...messages]
@@ -147,27 +156,35 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
           {/* <ChatBotResetChatDialog /> */}
         </CardHeader>
         <CardContent className="h-[50vh] overflow-y-auto " ref={chatContainer}>
-          <div className="space-y-4">
-            {messages.map((message, index) => (
-              (message.content || (message.role === "assistant" && streaming && index === messages.length - 1)) && (
-                <div
-                  key={index}
-                  className={cn(
-                    "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                    message.role === "user"
-                      ? "ml-auto bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  )}
-                >
-                  {message.role === "assistant" && streaming && index === messages.length - 1 && !hasStreamingMessageRef.current ? (
-                    <Loader />
-                  ) : (
-                    handlFormatMessage(message)
-                  )}
-                </div>
-              )
-            ))}
-          </div>
+          {messages.length >0 ? 
+        <div className="space-y-4">
+        {messages.map((message, index) => (
+          (message.content || (message.role === "assistant" && streaming && index === messages.length - 1)) && (
+            <div
+              key={index}
+              className={cn(
+                "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                message.role === "user"
+                  ? "ml-auto bg-primary text-primary-foreground"
+                  : "bg-muted"
+              )}
+            >
+              {message.role === "assistant" && streaming && index === messages.length - 1 && !hasStreamingMessageRef.current ? (
+                <Loader />
+              ) : (
+                handlFormatMessage(message)
+              )}
+            </div>
+          )
+        ))}
+      </div>:
+      <div className="flex flex-col items-center justify-center h-full w-full">
+      <Lottie
+      options={defaultOptions}/> 
+      
+      </div> 
+        }
+          
         </CardContent>
         <CardFooter>
           <div className="flex w-full items-center space-x-2">
