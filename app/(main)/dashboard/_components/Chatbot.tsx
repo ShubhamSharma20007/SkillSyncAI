@@ -40,7 +40,7 @@ const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
         onClick={handleClick}
         variant="outline"
         aria-label="Chatbot"
-        className='bg-black/80 fixed bottom-4 right-5 z-10 cursor-pointer border-white/30'
+        className='bg-black/80 fixed bottom-4 right-4 z-10 cursor-pointer border-white/30'
         asChild
       >
         {visible ? (

@@ -7,6 +7,7 @@ type MessageType = {
   role: string,
   content: string,
   createdAt?: string|Date,
+  functionCall?:string,
 }
 
 interface MessageContextType {
@@ -26,7 +27,8 @@ const SocketContext = createContext<MessageContextType>({
   isConnected: false,
   sendMessage: () => {},
   hasStreamingMessageRef:{current:false} as React.MutableRefObject<boolean>,
-  streaming: false
+  streaming: false,
+  
 
 });
 const URL ={

@@ -82,24 +82,23 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
     }
   }, [messages])
 
-  function handlFormatMessage(message:any) {
-    return(
-      JSON.stringify(message.content).replace(/"/g,"").split(/\\n/g).map((line, lineIndex) => (
+  function handlFormatMessage(message: any) {
+    if(!message.content) return null;
+
+    const content = message.content.replace(/\\n/g, "\n");
+    return content.split("\n").map((line:string, lineIndex:number) => {
+      const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1 </strong> ');
+      
+      return (
         <div
           key={lineIndex}
-          className={cn(
-            "flex items-center space-x-2",
-            
-          )}
+          className={cn("flex items-center space-x-2")}
         >
-     
-          {message.role === "assistant" }
-          <span>{line.replace(/\\n/g, "\n")}</span>
+          <span dangerouslySetInnerHTML={{ __html: formattedLine }} />
         </div>
-      ))
-    )
+      );
+    });
   }
-
   const defaultOptions = {
     loop: true,
     autoplay: true, 
@@ -156,7 +155,7 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
           {/* <ChatBotResetChatDialog /> */}
         </CardHeader>
         <CardContent className="h-[50vh] overflow-y-auto " ref={chatContainer}>
-          {messages.length >0 ? 
+          {/* {messages.length >0 ? 
         <div className="space-y-4">
         {messages.map((message, index) => (
           (message.content || (message.role === "assistant" && streaming && index === messages.length - 1)) && (
@@ -183,7 +182,38 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
       options={defaultOptions}/> 
       
       </div> 
-        }
+        } */}
+  {messages.length >0 ? 
+<div className="space-y-4">
+{messages.map((message, index) => {
+    const isStreamingMessage = message.role === "assistant" && streaming && index === messages.length - 1;
+    const shouldDisplay = message.content || isStreamingMessage;  
+    if (!shouldDisplay) return null;
+    return (
+      <div
+        key={index}
+        className={cn(
+          "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+          message.role === "user"
+            ? "ml-auto bg-primary text-primary-foreground"
+            : "bg-muted"
+        )}
+      >
+        {message.role === "assistant" && isStreamingMessage && (!hasStreamingMessageRef.current || message.functionCall) ? (
+          <Loader />
+        ) : (
+          handlFormatMessage(message)
+        )}
+      </div>
+    );
+  })}
+</div>
+: <div className="flex flex-col items-center justify-center h-full w-full">
+<Lottie
+options={defaultOptions}/> 
+
+</div> 
+}
           
         </CardContent>
         <CardFooter>
@@ -199,13 +229,12 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
               id="message" {...register('message', {
                 required: true,
                 minLength: {
-                  value: 3,
-                  message: 'Message must be at least 3 character long',
+                  value: 2,
+                  message: 'Message must be at least 2 character long',
                 }
               })} placeholder="Type your message..." className="flex-1" />
             <Button
-
-              disabled={!messageWatch && isConnected || streaming} size="icon" onClick={handleSubmit(onSubmit)}>
+              disabled={!messageWatch && isConnected || streaming ||  !!errors.message || getValues('message').trim().length < 2} size="icon" onClick={handleSubmit(onSubmit)}>
               <Send className="h-4 w-4" />
               <span className="sr-only">Send</span>
             </Button>
