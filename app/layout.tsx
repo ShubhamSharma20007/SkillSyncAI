@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import { SocketProvider } from "./context/SocketContext";
 // import { cronJob } from "@/lib/cron";
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 import {
   ClerkProvider,
 
@@ -43,6 +44,7 @@ export default async  function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <NextThemesProvider themes={["light","dark"]} defaultTheme="system" enableSystem attribute={'class'}>
     <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -58,7 +60,7 @@ export default async  function RootLayout({
            </main>
            <Toaster richColors />
           </ThemeProvider>
-         
+          </NextThemesProvider>
       </body>
       
     </html>

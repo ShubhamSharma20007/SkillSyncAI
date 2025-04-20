@@ -81,6 +81,24 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
     }
   }, [messages])
 
+  function handlFormatMessage(message:any) {
+    return(
+      JSON.stringify(message.content).replace(/"/g,"").split(/\\n/g).map((line, lineIndex) => (
+        <div
+          key={lineIndex}
+          className={cn(
+            "flex items-center space-x-2",
+            
+          )}
+        >
+     
+          {message.role === "assistant" }
+          <span>{line.replace(/\\n/g, "\n")}</span>
+        </div>
+      ))
+    )
+  }
+
 
 
   // React.useLayoutEffect(()=>{
@@ -135,7 +153,7 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
                 <div
                   key={index}
                   className={cn(
-                    "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                    "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                     message.role === "user"
                       ? "ml-auto bg-primary text-primary-foreground"
                       : "bg-muted"
@@ -144,18 +162,7 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
                   {message.role === "assistant" && streaming && index === messages.length - 1 && !hasStreamingMessageRef.current ? (
                     <Loader />
                   ) : (
-                    JSON.stringify(message.content).replace(/"/g,"").split(/\\n/g).map((line, lineIndex) => (
-                      <div
-                        key={lineIndex}
-                        className={cn(
-                          "flex items-center space-x-2",
-                          
-                        )}
-                      >
-                        {message.role === "assistant" }
-                        <span>{line.replace(/\\n/g, "\n")}</span>
-                      </div>
-                    ))
+                    handlFormatMessage(message)
                   )}
                 </div>
               )

@@ -66,8 +66,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsConnected(true);
     });
 
-    socketInstance.on('chat_response', (data) => {
-      
+    socketInstance.on('chat_response', (data) => {    
       if (data.stream) {
         if (!hasStreamingMessageRef.current) {
           hasStreamingMessageRef.current = true;
@@ -78,6 +77,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             content: data.content 
           }]);
         } else {
+          if(!streaming && !data.content){
+            setStreaming(true)
+          }
           currentStreamRef.current += data.content || '';
           setMessages(prev => {
             const updatedMessages = [...prev];
