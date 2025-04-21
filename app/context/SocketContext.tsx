@@ -33,7 +33,7 @@ const SocketContext = createContext<MessageContextType>({
 });
 const URL ={
   production:'https://skillsynx-socket-backend-1.onrender.com',
-  development:'http://localhost:4000'
+  development:'https://skillsynx-socket-backend-1.onrender.com'
   // 'http://localhost:4000' // socket server url
 } as const
 

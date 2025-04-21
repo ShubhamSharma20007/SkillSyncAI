@@ -188,13 +188,12 @@ export async function getAssesments() {
 
 
 export async function generateCustomQuiz(customQuizData: CustomInterviewFormData) {
-  console.log(customQuizData)
-
-  const { userId } = await auth();
-  if (!userId) throw new Error("id not found");
-  await dbConnect();
-  const user = await userModel.findOne({ clerkUserId: userId });
-  if (!user) throw new Error("User not found");
+  // await dbConnect();
+  // console.log(customQuizData)
+  // const { userId } = await auth();
+  // if (!userId) throw new Error("id not found");
+  // const user = await userModel.findOne({ clerkUserId: userId });
+  // if (!user) throw new Error("User not found");
   try {
     const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
     const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills?.join(", ")}` : "";
@@ -266,6 +265,7 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
 }
 `;
     const response = await generativeModel(prompt);
+    console.log(response);
     let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
 try {
   return JSON.parse(cleanedText as string);
