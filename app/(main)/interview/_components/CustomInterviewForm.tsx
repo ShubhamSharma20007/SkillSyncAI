@@ -38,7 +38,7 @@ import { useFetch } from '@/hooks/user-fetch'
 import { generateCustomQuiz } from '@/services/interview'
 import Quiz from './Quiz'
 import { toast } from 'sonner'
-
+import axios from 'axios'
 const difficultyLevel = [
     {
         value: "beginner",
@@ -126,10 +126,24 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
     type CustomInterviewFormData = z.infer<typeof customInterviewValidation>;
     const onSubmit: SubmitHandler<CustomInterviewFormData> = async (data) => {
         setIsOpen(false)
+        setLoading(true)
         try {
-            await customQuizFN(data)
+            // await customQuizFN(data)
+            const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
+            const res = await response.data;
+
+            if (res && res.questions) {
+            setCustomInterviewData(res || {});
+            setIsOpen(false);
+            reset();
+            setLoading(false)
+               
+            }
         } catch (error : any) {
             toast.error('error during generating custom interview',error || error.message)
+        }finally{
+            setLoading(false)
+
         }
     };
     useEffect(() => {
@@ -140,13 +154,13 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
         }
     }, [isTimer, setValue, watch])
 
-    useEffect(() => {
-        if (customQuizData) {
-            setCustomInterviewData(customQuizData);
-            setIsOpen(false);
-            reset();
-        }
-    }, [customQuizData, setCustomInterviewData]);
+    // useEffect(() => {
+    //     if (customQuizData) {
+    //         setCustomInterviewData(customQuizData);
+    //         setIsOpen(false);
+    //         reset();
+    //     }
+    // }, [customQuizData, setCustomInterviewData]);
 
     useEffect(()=>{
     setLoading(loading)
