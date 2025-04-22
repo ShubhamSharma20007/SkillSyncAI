@@ -6,7 +6,7 @@
     }
   ],
   "functions": {
-    "api/custom-interview": {
+    "services/interview": {
       "maxDuration": 60,
       "memory": 1024
     }

@@ -56,6 +56,10 @@ const difficultyLevel = [
 
 const timerArray = [
     {
+        value: "5",
+        label: '5 minutes'
+    },
+    {
         value: "10",
         label: '10 minutes'
     },
@@ -66,10 +70,6 @@ const timerArray = [
     {
         value: "30",
         label: '30 minutes'
-    },
-    {
-        value: "60",
-        label: '60 minutes'
     }
 ]
 
@@ -128,18 +128,18 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
         setIsOpen(false)
         setLoading(true)
         try {
-            // await customQuizFN(data)
-            const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
-            const res = await response.data;
-            if (res && res.questions) {
-            setCustomInterviewData(res || {});
-            setIsOpen(false);
-            reset();
-            setLoading(false)
+            await customQuizFN(data)
+            // const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
+            // const res = await response.data;
+
+            // if (res && res.questions) {
+            // setCustomInterviewData(res || {});
+            // setIsOpen(false);
+            // reset();
+            // setLoading(false)
                
-            }
+            // }
         } catch (error : any) {
-            console.log('error', error)
             toast.error('error during generating custom interview',error || error.message)
         }finally{
             setLoading(false)
@@ -154,13 +154,13 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
         }
     }, [isTimer, setValue, watch])
 
-    // useEffect(() => {
-    //     if (customQuizData) {
-    //         setCustomInterviewData(customQuizData);
-    //         setIsOpen(false);
-    //         reset();
-    //     }
-    // }, [customQuizData, setCustomInterviewData]);
+    useEffect(() => {
+        if (customQuizData) {
+            setCustomInterviewData(customQuizData);
+            setIsOpen(false);
+            reset();
+        }
+    }, [customQuizData, setCustomInterviewData]);
 
     useEffect(()=>{
     setLoading(loading)
