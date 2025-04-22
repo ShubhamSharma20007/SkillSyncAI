@@ -52,9 +52,14 @@ Generate ${customQuizData.questionCount} challenging ${customQuizData.difficulty
 
 Requirements:
 - Each question must have **4 unique options** (labeled A, B, C, D), **1 correct answer**, and an **explanation** but Don't mentioned label.
-- CRITICALLY IMPORTANT: All 4 options MUST be approximately the same length (character count). The correct answer should NOT be longer or more detailed than the other options.
+
+
+- CRITICALLY IMPORTANT: 
+- All 4 options MUST be approximately the same length (character count). The correct answer should 
+  NOT be longer or more detailed than the other options.
 - Make wrong options plausible and similarly detailed to the correct option.
 - Each option should be concise but complete - aim for 10-20 words per option.
+- questions array length must be equal to the ${customQuizData.questionCount}.
 - The content must be provided in **${customQuizData.language}**.
 - The difficulty level must be **${customQuizData.difficultyLevel}** (one of: beginner, intermediate, advanced).
 - The questions should match the experience level of a **${customQuizData.experienceLevel}** candidate (one of: fresher, mid-level, senior).
