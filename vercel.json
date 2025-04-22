@@ -6,7 +6,7 @@
     }
   ],
   "functions": {
-    "services/interview": {
+    "services/interview.ts": {
       "maxDuration": 60,
       "memory": 1024
     }
