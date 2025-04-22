@@ -132,81 +132,30 @@ export async function getAssesments() {
 }
 
 
-// export  async function generateCustomQuiz(customQuizData:CustomInterviewFormData){
-//   const { userId } = await auth();  
-//   if (!userId) throw new Error("id not found");
-//   await dbConnect();
-//   const user = await userModel.findOne({ clerkUserId: userId });
-//   if (!user) throw new Error("User not found");
-// try {
+
+
+// export async function generateCustomQuiz(customQuizData: CustomInterviewFormData) {
+//   // await dbConnect();
+//   // console.log(customQuizData)
+//   // const { userId } = await auth();
+//   // if (!userId) throw new Error("id not found");
+//   // const user = await userModel.findOne({ clerkUserId: userId });
+//   // if (!user) throw new Error("User not found");
+//   try {
+//     const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
+//     const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills?.join(", ")}` : "";
+//     const hasTimer = customQuizData.isTimer === true;
+//     const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
 
 // const prompt = `
-// Generate  technical interview questions for a ${
-//   `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`
-// } professional${
-// user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
-// }.
-
-// INSTRUCTIONS:
-//     - number of  question should be ${customQuizData.questionCount} with multiple choice with 4
-//       options.
-//     - Each question should be unique to prevoius one.
-//     - User will be provide the question language as ${customQuizData.language}.
-//     - User will be provided the question difficultyLevel as ${customQuizData.difficultyLevel}.it 
-//       will be one of the following: \`\`\`beginner, intermediate, advanced \`\`\` and also provide the experience lavel will be one of the following: \`\`\`fresher, mid-level, senior \`\`\`.
-//     - ${customQuizData.isTimer} ? Add a timer to the quiz with a duration of ${customQuizData.
-//       timerValue?.replace(/ minutes/g,'' )} minutes. : No timer.
-
-
-// Return the response in this JSON format only, no additional text:
-// {
-//   "timer": "${customQuizData.isTimer === true ? true : false}",
-//   "duration": "${customQuizData.timerValue}" 
-//   "totalNumberOfQuestions": "${customQuizData.questionCount}",
-//   "language": "${customQuizData.language}",
-//   "difficultyLevel": "${customQuizData.difficultyLevel}",
-//   "experienceLevel": "${customQuizData.experienceLevel}",
-//   "questions": [
-//     {
-//       "question": "string",
-//       "options": ["string", "string", "string", "string"],
-//       "correctAnswer": "string",
-//       "explanation": "string"
-//     }
-//   ]
-// }
-// `;
-
-// const response = await generativeModel(prompt);
-// const cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
-// return JSON.parse(cleanedText as string)?.questions;
-// } catch (error) {
-// console.log(error);
-// throw new Error("Error generating quiz");
-// }
-// }
-
-
-export async function generateCustomQuiz(customQuizData: CustomInterviewFormData) {
-  // await dbConnect();
-  // console.log(customQuizData)
-  // const { userId } = await auth();
-  // if (!userId) throw new Error("id not found");
-  // const user = await userModel.findOne({ clerkUserId: userId });
-  // if (!user) throw new Error("User not found");
-  try {
-    const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
-    const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills?.join(", ")}` : "";
-    const hasTimer = customQuizData.isTimer === true;
-    const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
-    // 
-//     const prompt = `
 // Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills ? ` with ${skills} expertise` : ''}.
 
 // Requirements:
-// - Each question must have **4 unique options**, **1 correct answer**, and an **explanation**.
-// - Make sure **all options are similar in length** to avoid giving away the correct answer.
-// - The content must be provided language in **${customQuizData.language}**.
+// - Each question must have **4 unique options** (labeled A, B, C, D), **1 correct answer**, and an **explanation**.
+// - CRITICALLY IMPORTANT: All 4 options MUST be approximately the same length (character count). The correct answer should NOT be longer or more detailed than the other options.
+// - Make wrong options plausible and similarly detailed to the correct option.
+// - Each option should be concise but complete - aim for 10-20 words per option.
+// - The content must be provided in **${customQuizData.language}**.
 // - The difficulty level must be **${customQuizData.difficultyLevel}** (one of: beginner, intermediate, advanced).
 // - The questions should match the experience level of a **${customQuizData.experienceLevel}** candidate (one of: fresher, mid-level, senior).
 // ${hasTimer ? `- Include a quiz timer of ${timerValue} minutes.` : "- Do not include a timer."}
@@ -225,26 +174,55 @@ export async function generateCustomQuiz(customQuizData: CustomInterviewFormData
 //     {
 //       "question": "string",
 //       "options": ["string", "string", "string", "string"],
-//       "correctAnswer": "string",
+//       "correctAnswer": "string", 
 //       "explanation": "string"
 //     }
 //   ]
 // }
 // `;
-const prompt = `
-Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills ? ` with ${skills} expertise` : ''}.
+//     const response = await generativeModel(prompt);
+//     console.log(response);
+//     let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
+// try {
+//   return JSON.parse(cleanedText as string);
+// } catch (e) {
+//   console.log("Initial JSON parsing failed, attempting to fix JSON format");
+//   try {
+//     cleanedText = cleanedText!.replace(/,\s*]/g, ']');
+//     cleanedText = cleanedText?.replace(/,\s*}/g, '}');
+//     return JSON.parse(cleanedText as string);
+//   } catch (jsonError) {
+//     console.error("JSON parsing error:", jsonError);
+//     console.error("Problematic JSON string:", cleanedText);
+//     throw new Error("Error generating quiz: Invalid JSON format returned");
+//   }
+// }
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error("Error generating quiz");
+//   }
+// }
+
+export async function generateCustomQuiz(customQuizData: CustomInterviewFormData) {
+  try {
+    const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
+    const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills.join(", ")}` : "";
+    const hasTimer = customQuizData.isTimer === true;
+    const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
+
+    const prompt = `
+Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills}.
 
 Requirements:
-- Each question must have **4 unique options** (labeled A, B, C, D), **1 correct answer**, and an **explanation**.
-- CRITICALLY IMPORTANT: All 4 options MUST be approximately the same length (character count). The correct answer should NOT be longer or more detailed than the other options.
-- Make wrong options plausible and similarly detailed to the correct option.
-- Each option should be concise but complete - aim for 10-20 words per option.
-- The content must be provided in **${customQuizData.language}**.
-- The difficulty level must be **${customQuizData.difficultyLevel}** (one of: beginner, intermediate, advanced).
-- The questions should match the experience level of a **${customQuizData.experienceLevel}** candidate (one of: fresher, mid-level, senior).
+- Each question must have 4 unique options (A, B, C, D), 1 correct answer, and an explanation.
+- All options must be approximately the same length.
+- Make wrong options plausible and similarly detailed to the correct one.
+- Each option should be 10-20 words long.
+- Provide the content in ${customQuizData.language}.
+- Match the experience level of a ${customQuizData.experienceLevel} candidate.
 ${hasTimer ? `- Include a quiz timer of ${timerValue} minutes.` : "- Do not include a timer."}
 
-Return the data in **pure JSON format**, exactly as shown below. Do not include any additional text, comments, or markdown syntax:
+Return in pure JSON format:
 
 {
   "industry":"${industryTag}",
@@ -264,25 +242,18 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
   ]
 }
 `;
+
     const response = await generativeModel(prompt);
-    console.log(response);
     let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
-try {
-  return JSON.parse(cleanedText as string);
-} catch (e) {
-  console.log("Initial JSON parsing failed, attempting to fix JSON format");
-  try {
-    cleanedText = cleanedText!.replace(/,\s*]/g, ']');
-    cleanedText = cleanedText?.replace(/,\s*}/g, '}');
-    return JSON.parse(cleanedText as string);
-  } catch (jsonError) {
-    console.error("JSON parsing error:", jsonError);
-    console.error("Problematic JSON string:", cleanedText);
-    throw new Error("Error generating quiz: Invalid JSON format returned");
-  }
-}
+
+    try {
+      return JSON.parse(cleanedText as string);
+    } catch {
+      cleanedText = cleanedText!.replace(/,\s*]/g, ']').replace(/,\s*}/g, '}');
+      return JSON.parse(cleanedText as string);
+    }
   } catch (error) {
-    console.error(error);
+    console.error("Quiz generation failed:", error);
     throw new Error("Error generating quiz");
   }
 }
