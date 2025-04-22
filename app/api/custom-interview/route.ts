@@ -15,38 +15,7 @@ console.log("customQuizData", customQuizData)
     const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills?.join(", ")}` : "";
     const hasTimer = customQuizData.isTimer === true;
     const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
-    // 
-//     const prompt = `
-// Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills ? ` with ${skills} expertise` : ''}.
-
-// Requirements:
-// - Each question must have **4 unique options**, **1 correct answer**, and an **explanation**.
-// - Make sure **all options are similar in length** to avoid giving away the correct answer.
-// - The content must be provided language in **${customQuizData.language}**.
-// - The difficulty level must be **${customQuizData.difficultyLevel}** (one of: beginner, intermediate, advanced).
-// - The questions should match the experience level of a **${customQuizData.experienceLevel}** candidate (one of: fresher, mid-level, senior).
-// ${hasTimer ? `- Include a quiz timer of ${timerValue} minutes.` : "- Do not include a timer."}
-
-// Return the data in **pure JSON format**, exactly as shown below. Do not include any additional text, comments, or markdown syntax:
-
-// {
-//   "industry":"${industryTag}",
-//   "timer": "${hasTimer}",
-//   "duration": "${customQuizData.timerValue}",
-//   "totalNumberOfQuestions":"${customQuizData.questionCount}",
-//   "language": "${customQuizData.language}",
-//   "difficultyLevel": "${customQuizData.difficultyLevel}",
-//   "experienceLevel": "${customQuizData.experienceLevel}",
-//   "questions": [
-//     {
-//       "question": "string",
-//       "options": ["string", "string", "string", "string"],
-//       "correctAnswer": "string",
-//       "explanation": "string"
-//     }
-//   ]
-// }
-// `;
+  
 const prompt = `
 Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills ? ` with ${skills} expertise` : ''}.
 
@@ -59,7 +28,7 @@ Requirements:
   NOT be longer or more detailed than the other options.
 - Make wrong options plausible and similarly detailed to the correct option.
 - Each option should be concise but complete - aim for 10-20 words per option.
-- questions array length must be equal to the ${customQuizData.questionCount}.
+- "You must generate **exactly ${customQuizData.questionCount} questions**. No more, no less. Do NOT generate any extra questions."
 - The content must be provided in **${customQuizData.language}**.
 - The difficulty level must be **${customQuizData.difficultyLevel}** (one of: beginner, intermediate, advanced).
 - The questions should match the experience level of a **${customQuizData.experienceLevel}** candidate (one of: fresher, mid-level, senior).
