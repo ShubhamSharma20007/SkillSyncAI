@@ -74,7 +74,7 @@ export const customInterviewValidation=z.object({
 subIndustry: z.string().min(1, "Sub Industry is required"),
 
   difficultyLevel:z.string().min(1, "Difficulty level is required"),
-  questionCount:z.number().min(10, "Question should be at least 10 and maxiumum 25").max(25),
+  questionCount:z.number().min(10, "Question should be at least 10 and maxiumum 20").max(20),
   skills: z.string().min(1, "Skills is required").transform((val) =>
     val
       ? val
