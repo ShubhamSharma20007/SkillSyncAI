@@ -75,9 +75,12 @@ try {
   try {
     cleanedText = cleanedText!.replace(/,\s*]/g, ']');
     cleanedText = cleanedText?.replace(/,\s*}/g, '}');
-    return NextResponse.json(JSON.parse(cleanedText as string), {
-        status: 200,
-      })
+    const parsedData = JSON.parse(cleanedText as string);
+    if (parsedData.questions.length > customQuizData.questionCount) {
+      parsedData.questions = parsedData.questions.slice(0, customQuizData.questionCount);
+    }
+    return NextResponse.json(parsedData, { status: 200 });
+    
   } catch (jsonError) {
     console.error("JSON parsing error:", jsonError);
     console.error("Problematic JSON string:", cleanedText);
