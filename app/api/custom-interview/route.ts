@@ -1,6 +1,11 @@
 import generativeModel from "@/lib/gemini"
 import { aiModel } from "@/lib/opne-ai";
 import { NextResponse } from "next/server";
+
+
+export const  maxDuration = 300;
+
+
 export async function POST(request: Request){
 const body = await request.json()
 const {customQuizData} = body
