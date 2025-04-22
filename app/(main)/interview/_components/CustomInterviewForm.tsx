@@ -56,10 +56,6 @@ const difficultyLevel = [
 
 const timerArray = [
     {
-        value: "5",
-        label: '5 minutes'
-    },
-    {
         value: "10",
         label: '10 minutes'
     },
@@ -70,6 +66,10 @@ const timerArray = [
     {
         value: "30",
         label: '30 minutes'
+    },
+    {
+        value: "60",
+        label: '60 minutes'
     }
 ]
 
