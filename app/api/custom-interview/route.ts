@@ -1,6 +1,6 @@
 import generativeModel from "@/lib/gemini"
 import { NextResponse } from "next/server";
-export async function POST(request: Request,response:Response){
+export async function POST(request: Request){
 const body = await request.json()
 const {customQuizData} = body
  try {
