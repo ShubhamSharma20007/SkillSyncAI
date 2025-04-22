@@ -206,7 +206,7 @@ export async function getAssesments() {
 //     throw new Error("Error generating quiz");
 //   }
 // }
-
+//  <---- Not Using Yet -->
 export async function generateCustomQuiz(customQuizData: CustomInterviewFormData) {
   try {
     const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
@@ -215,7 +215,7 @@ export async function generateCustomQuiz(customQuizData: CustomInterviewFormData
     const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
 
     const prompt = `
-Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills}.
+Generate only ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills}.
 
 Requirements:
 - Each question must have 4 unique options (A, B, C, D), 1 correct answer, and an explanation.

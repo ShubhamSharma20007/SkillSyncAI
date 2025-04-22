@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request){
 const body = await request.json()
 const {customQuizData} = body
+console.log("customQuizData", customQuizData)
  try {
     const industryTag = `${customQuizData.industry.toLowerCase()}-${customQuizData.subIndustry.toLowerCase().split(" ").join("-")}`;
     const skills = customQuizData.skills?.length ? ` with expertise in ${customQuizData.skills?.join(", ")}` : "";
