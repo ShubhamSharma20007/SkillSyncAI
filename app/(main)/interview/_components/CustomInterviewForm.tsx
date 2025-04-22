@@ -131,7 +131,6 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
             // await customQuizFN(data)
             const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
             const res = await response.data;
-
             if (res && res.questions) {
             setCustomInterviewData(res || {});
             setIsOpen(false);
@@ -140,6 +139,7 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
                
             }
         } catch (error : any) {
+            console.log('error', error)
             toast.error('error during generating custom interview',error || error.message)
         }finally{
             setLoading(false)
