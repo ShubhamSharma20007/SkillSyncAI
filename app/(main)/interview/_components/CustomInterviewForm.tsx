@@ -128,17 +128,16 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
         setIsOpen(false)
         setLoading(true)
         try {
-            await customQuizFN(data)
-            // const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
-            // const res = await response.data;
-
-            // if (res && res.questions) {
-            // setCustomInterviewData(res || {});
-            // setIsOpen(false);
-            // reset();
-            // setLoading(false)
+            // await customQuizFN(data)
+            const response  = await axios.post<any>('/api/custom-interview', { customQuizData: data })
+            const res = await response.data;
+            if (res && res.questions) {
+            setCustomInterviewData(res || {});
+            setIsOpen(false);
+            reset();
+            setLoading(false)
                
-            // }
+            }
         } catch (error : any) {
             toast.error('error during generating custom interview',error || error.message)
         }finally{
@@ -154,13 +153,13 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
         }
     }, [isTimer, setValue, watch])
 
-    useEffect(() => {
-        if (customQuizData) {
-            setCustomInterviewData(customQuizData);
-            setIsOpen(false);
-            reset();
-        }
-    }, [customQuizData, setCustomInterviewData]);
+    // useEffect(() => {
+    //     if (customQuizData) {
+    //         setCustomInterviewData(customQuizData);
+    //         setIsOpen(false);
+    //         reset();
+    //     }
+    // }, [customQuizData, setCustomInterviewData]);
 
     useEffect(()=>{
     setLoading(loading)

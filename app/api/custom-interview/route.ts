@@ -1,4 +1,5 @@
 import generativeModel from "@/lib/gemini"
+import { aiModel } from "@/lib/opne-ai";
 import { NextResponse } from "next/server";
 export async function POST(request: Request){
 const body = await request.json()
@@ -73,9 +74,18 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
   ]
 }
 `;
-    const response = await generativeModel(prompt);
-    console.log(response);
-    let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
+    // const response = await generativeModel(prompt);
+    // console.log(response);
+    // let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
+     const response = await aiModel.responses.create({
+        model: "gpt-4.1",
+        instructions: prompt,
+        input:"generate the quiz questions with options and correct answer and return in pure JSON format",
+        temperature: 0.7,
+        })
+        // const response = await generativeModel(prompt);
+        let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
+      console.log("cleanedText", cleanedText)
 try {
   return NextResponse.json(JSON.parse(cleanedText as string), {
     status: 200,

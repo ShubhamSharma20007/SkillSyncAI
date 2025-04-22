@@ -1,5 +1,7 @@
 "use server"
-
+import dotenv from 'dotenv';
+dotenv.config();
+import { aiModel } from "@/lib/opne-ai";
 import { QuestionInterface } from "@/interface/questionInterface";
 import generativeModel from "@/lib/gemini";
 import dbConnect from "@/lib/mongodb";
@@ -8,6 +10,8 @@ import { auth } from "@clerk/nextjs/server";
 import assesmentModel from "@/models/assessment.model";
 import { CustomInterviewFormData } from "@/interface/customInterviewInterface";
 import { boolean } from "zod";
+
+
 export async function generateQuiz() {
   const { userId } = await auth();
   if (!userId) throw new Error("id not found");
@@ -242,9 +246,15 @@ Return in pure JSON format:
   ]
 }
 `;
-
-    const response = await generativeModel(prompt);
-    let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
+    const response = await aiModel.responses.create({
+    model: "gpt-4.1",
+    instructions: prompt,
+    input:"generate the quiz questions with options and correct answer and return in pure JSON format",
+    temperature: 0.7,
+    })
+    // const response = await generativeModel(prompt);
+    let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
+    console.log("cleanedText", cleanedText)
 
     try {
       return JSON.parse(cleanedText as string);
