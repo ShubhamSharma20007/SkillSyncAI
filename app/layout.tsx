@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
-import { SocketProvider } from "./context/SocketContext";
+import { SocketProvider } from "../context/SocketContext";
 // import { cronJob } from "@/lib/cron";
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import {
