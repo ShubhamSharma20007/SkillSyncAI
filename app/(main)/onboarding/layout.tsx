@@ -1,10 +1,10 @@
-import { Suspense } from "react";
-import { BarLoader } from "react-spinners";
+import React, { Suspense } from "react"
+import { BarLoader } from "react-spinners"
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function OnboardingRootLayout({children}:{children:React.ReactNode}) {
   return (
-    <div className="px-5 w-full">
-        <Suspense
+   <div className="px-5 w-full">
+    <Suspense
         fallback={
           <div className="fixed inset-0 flex justify-center items-center  z-50">
             <BarLoader color="gray" width={'50%'} loading={true} />
@@ -13,6 +13,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         {children}
       </Suspense>
-    </div>
-  );
+   </div>
+  )
 }

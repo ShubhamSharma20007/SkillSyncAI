@@ -20,7 +20,7 @@ export default function MockInterview() {
       }
       timerRef.current = setTimeout(() => {
         customToast({ content: 'Hold tight! Your interview is being prepared !' })
-      }, 20 * 1000)
+      }, 30 * 1000)
 
       return () => {
         if (timerRef.current) {
