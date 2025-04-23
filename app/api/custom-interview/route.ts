@@ -58,12 +58,12 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
     // console.log(response);
     // let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
      const response = await aiModel.responses.create({
-        model: "gpt-4.1",
+        model: "gpt-4o",
         instructions: prompt,
         input:"generate the quiz questions with options and correct answer and return in pure JSON format",
         temperature: 0.7,
         })
-        // const response = await generativeModel(prompt);
+      
         let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
       console.log("cleanedText", cleanedText)
 try {
@@ -75,12 +75,9 @@ try {
   try {
     cleanedText = cleanedText!.replace(/,\s*]/g, ']');
     cleanedText = cleanedText?.replace(/,\s*}/g, '}');
-    const parsedData = JSON.parse(cleanedText as string);
-    if (parsedData.questions.length > customQuizData.questionCount) {
-      parsedData.questions = parsedData.questions.slice(0, customQuizData.questionCount);
-    }
-    return NextResponse.json(parsedData, { status: 200 });
-    
+    return NextResponse.json(JSON.parse(cleanedText as string), {
+        status: 200,
+      })
   } catch (jsonError) {
     console.error("JSON parsing error:", jsonError);
     console.error("Problematic JSON string:", cleanedText);
