@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { useSocket } from "@/app/context/SocketContext"
+import { useSocket } from "@/context/SocketContext"
 import { useForm } from "react-hook-form"
 import Loader from "@/components/Loader"
 import { useUser } from "@clerk/nextjs";

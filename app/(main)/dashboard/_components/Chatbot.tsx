@@ -3,7 +3,7 @@ import { Bot } from 'lucide-react'
 import React, { useEffect } from 'react'
 
 import { Toggle } from "@/components/ui/toggle"
-import { useSocket } from '@/app/context/SocketContext'
+import { useSocket } from '@/context/SocketContext'
 import { AiChatInterface } from '@/interface/aiChatInterfce'
 import { useAuth } from '@clerk/nextjs'
 import { X } from 'lucide-react'
