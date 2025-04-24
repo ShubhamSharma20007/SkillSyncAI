@@ -19,6 +19,8 @@ import { jsPDF } from "jspdf";
 import html2pdf from 'html2pdf.js'
 import { toast } from 'sonner'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import ResumeTemplates from './ResumeTemplates'
+
 const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialContent?: string }) => {
   const { user } = useUser();
   const [activeTab, setActiveTab] = React.useState('edit');
@@ -83,6 +85,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
       : "";
   }
 
+
   const getCombineContent = () => {
     if (!formValues) return '';
     const { summary, skills, experience, education, projects } = formValues;
@@ -99,6 +102,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   useEffect(() => {
     if (activeTab === "edit") {
       const newContent = getCombineContent();
+      console.log({newContent})
       if (newContent) {
         setPreviewContent(newContent);
       } else if (initialResumeContent) {
@@ -137,11 +141,13 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     try {
       const element = document.getElementById("resume-pdf");
       const opt = {
-        margin: [15, 15],
+        margin: [15, 15, 15, 15],
         filename: "resume.pdf",
+        enableLinks:true,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       };
 
       await html2pdf().set(opt).from(element).save();
@@ -285,10 +291,15 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
       </div>
       
       <Tabs defaultValue="edit" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+       <div className='flex justify-between items-center'>
+       <TabsList>
           <TabsTrigger value="edit">Form</TabsTrigger>
           <TabsTrigger value="preview">Markdown</TabsTrigger>
         </TabsList>
+     {
+      activeTab ==="preview" &&  <ResumeTemplates formValues={formValues} setPreviewContent={setPreviewContent}/>
+     }
+       </div>
 
         <TabsContent value="edit">
           <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
@@ -490,6 +501,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
               onChange={handleEditorChange}
               height={800}
               preview={resumeMode}
+             
             />
           </div>
           
