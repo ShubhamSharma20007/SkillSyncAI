@@ -246,14 +246,15 @@ Return in pure JSON format:
   ]
 }
 `;
-    const response = await aiModel.responses.create({
-    model: "gpt-4.1",
-    instructions: prompt,
-    input:"generate the quiz questions with options and correct answer and return in pure JSON format",
-    temperature: 0.7,
-    })
-    // const response = await generativeModel(prompt);
-    let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
+    // const response = await aiModel.responses.create({
+    // model: "gpt-4.1",
+    // instructions: prompt,
+    // input:"generate the quiz questions with options and correct answer and return in pure JSON format",
+    // temperature: 0.7,
+    // })
+    const response = await generativeModel(prompt);
+    // let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
+    let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
     console.log("cleanedText", cleanedText)
 
     try {
