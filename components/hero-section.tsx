@@ -27,9 +27,9 @@ export default function HeroSection() {
       <div className=' space-y-6 text-center'>
       <div className='space-y-6 mx-auto'>
         <h1 className='gradient-title text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl'>Your Personal AI <span>
-        <span className=" text-yellow-50 ">
-        <h1 className="max-w-2xl text-center  lg:text-6xl xl:text-8xl leading-snug inline-block">
-        <span className="relative">
+        <span className="">
+        <h1 className="max-w-2xl text-center text-5xl leading-snug inline-block">
+        <span className="relative gradient-title text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl">
           Assistant
           <svg
             viewBox="0 0 286 73"
