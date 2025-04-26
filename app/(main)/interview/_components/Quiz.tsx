@@ -25,6 +25,7 @@ function QuizComponent() {
   const {
     loading: isGenerateQuiz,
     data: quizData,
+    setData:setQuizData,
     fn: generateQuizFn
   } = useFetch(generateQuiz)
 
@@ -40,7 +41,11 @@ function QuizComponent() {
       setAnswers(Array(quizData?.questions.length).fill(null))
     }
   }, [quizData]);
-
+  useEffect(()=>{
+    if(resultData){
+      setQuizData(null)
+    }
+  },[resultData])
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers]
     newAnswers[currentQuestion] = answer
@@ -81,11 +86,17 @@ function QuizComponent() {
       e.preventDefault();
       e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
     }
-    window.addEventListener('beforeunload', handleRefreshPage)
-    return () => {
-      window.removeEventListener('beforeunload', handleRefreshPage)
+    
+    const shouldWarnOnRefresh = quizData?.questions?.length && !resultData;
+    
+    if (shouldWarnOnRefresh) {
+      window.addEventListener('beforeunload', handleRefreshPage);
     }
-  }, [quizData])
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleRefreshPage);
+    }
+  }, [quizData, resultData])
 
 
   const startNewQuiz = () => {
@@ -229,6 +240,21 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
     fn: saveQuizFun
   } = useFetch(saveQuizResult)
 
+
+  useEffect(() => {
+    const handleRefreshPage = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
+    }
+    const shouldWarnOnRefresh = customQuizJSON?.questions?.length && !resultData;
+    if (shouldWarnOnRefresh) {
+      window.addEventListener('beforeunload', handleRefreshPage);
+    }
+    return () => {
+      window.removeEventListener('beforeunload', handleRefreshPage);
+    }
+  }, [customQuizJSON, resultData])
+
   useEffect(() => {
     if (customQuizJSON?.questions && customQuizJSON?.questions.length) {
       setAnswers(Array(customQuizJSON?.questions.length).fill(null))
@@ -236,11 +262,6 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
   }, [customQuizJSON]);
 
 
-  // useEffect(() => {
-  //   if (resultData) {
-  //     setCustomQuizJSON(null);
-  //   }
-  // }, [resultData, setCustomQuizJSON]);
 
 
   const handleAnswer = (answer: string) => {
@@ -326,13 +347,6 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
   }, [customQuizJSON?.timer, currentQuestion])
 
 
-  if (resultData) {
-    return (
-      <div className="mx-2">
-        <QuizResult result={resultData} onStartNew={startNewQuiz} />
-      </div>
-    );
-  }
 
   const question = customQuizJSON?.questions[currentQuestion] || {
     question: "Question not available",
@@ -341,16 +355,13 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
   };
 
 
-  useEffect(() => {
-    const handleRefreshPage = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
-    }
-    window.addEventListener('beforeunload', handleRefreshPage)
-    return () => {
-      window.removeEventListener('beforeunload', handleRefreshPage)
-    }
-  }, [customQuizJSON])
+  if (resultData) {
+    return (
+      <div className="mx-2">
+        <QuizResult result={resultData} onStartNew={startNewQuiz} />
+      </div>
+    );
+  }
 
   return (
     <div>
