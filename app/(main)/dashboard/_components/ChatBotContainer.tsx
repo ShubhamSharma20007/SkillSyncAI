@@ -1,9 +1,10 @@
 
 import * as React from "react"
-import { CheckIcon, PaperclipIcon, PlusIcon, Send, X } from "lucide-react"
+import { Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -155,34 +156,7 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
           {/* <ChatBotResetChatDialog /> */}
         </CardHeader>
         <CardContent className="h-[50vh] overflow-y-auto " ref={chatContainer}>
-          {/* {messages.length >0 ? 
-        <div className="space-y-4">
-        {messages.map((message, index) => (
-          (message.content || (message.role === "assistant" && streaming && index === messages.length - 1)) && (
-            <div
-              key={index}
-              className={cn(
-                "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                message.role === "user"
-                  ? "ml-auto bg-primary text-primary-foreground"
-                  : "bg-muted"
-              )}
-            >
-              {message.role === "assistant" && streaming && index === messages.length - 1 && !hasStreamingMessageRef.current ? (
-                <Loader />
-              ) : (
-                handlFormatMessage(message)
-              )}
-            </div>
-          )
-        ))}
-      </div>:
-      <div className="flex flex-col items-center justify-center h-full w-full">
-      <Lottie
-      options={defaultOptions}/> 
-      
-      </div> 
-        } */}
+
   {messages.length >0 ? 
 <div className="space-y-4">
 {messages.map((message, index) => {
@@ -218,7 +192,7 @@ options={defaultOptions}/>
         </CardContent>
         <CardFooter>
           <div className="flex w-full items-center space-x-2">
-            <Input
+            {/* <Input
               autoComplete="off"
               spellCheck="true"
               onKeyUp={(e) => {
@@ -232,7 +206,24 @@ options={defaultOptions}/>
                   value: 2,
                   message: 'Message must be at least 2 character long',
                 }
-              })} placeholder="Type your message..." className="flex-1" />
+              })} placeholder="Type your message..." className="flex-1" /> */}
+              <Textarea 
+               autoComplete="off"
+               spellCheck="true"
+               onKeyUp={(e) => {
+                 if (e.key.toLowerCase() === 'enter' && !e.shiftKey) {
+                   handleSubmit(onSubmit)()
+                 }
+               }}
+               id="message" {...register('message', {
+                 required: true,
+                 minLength: {
+                   value: 2,
+                   message: 'Message must be at least 2 character long',
+                 }
+                })} className="max-h-8 resize-none overflow-y-auto flex-1" placeholder="Type your message here..."   
+              />
+
             <Button
               disabled={!messageWatch && isConnected || streaming ||  !!errors.message || getValues('message').trim().length < 2} size="icon" onClick={handleSubmit(onSubmit)}>
               <Send className="h-4 w-4" />

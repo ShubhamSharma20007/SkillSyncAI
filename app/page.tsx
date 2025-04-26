@@ -124,7 +124,7 @@ let aiChats=[];
       </section>
 
           {/* Career section */}
-            <section className="w-full ">
+            <section className="w-full bg-background/60">
         <div className=" mx-auto py-24 background rounded-t-3xl">
           <div className="flex flex-col items-center justify-center space-y-4 text-center text-3xl max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl md:text-5xl">Ready to Accelerate Your Career? </h2>
