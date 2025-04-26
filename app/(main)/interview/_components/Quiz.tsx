@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from 'sonner'
 import QuizResult from './QuizResult'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Terminal } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 
 interface Props {
@@ -22,7 +22,6 @@ function QuizComponent() {
   const [answers, setAnswers] = React.useState<string[]>([])
   const [correctAnser, setCorrectAnswer] = React.useState<string[]>([])
   const [showExplaination, setShowExplanation] = React.useState(false)
-
   const {
     loading: isGenerateQuiz,
     data: quizData,
@@ -61,7 +60,7 @@ function QuizComponent() {
   const finishQuiz = async () => {
     let score = calculateScore()
     try {
-      await saveQuizFun(quizData?.questions, answers, score,false)
+      await saveQuizFun(quizData?.questions, answers, score, false)
       toast.success('Quiz Completed!')
     } catch (error: any) {
       toast.error(error.message || error)
@@ -77,6 +76,17 @@ function QuizComponent() {
       finishQuiz()
     }
   }
+  useEffect(() => {
+    const handleRefreshPage = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
+    }
+    window.addEventListener('beforeunload', handleRefreshPage)
+    return () => {
+      window.removeEventListener('beforeunload', handleRefreshPage)
+    }
+  }, [quizData])
+
 
   const startNewQuiz = () => {
     setCurrentQuestion(0)
@@ -96,6 +106,8 @@ function QuizComponent() {
   if (isGenerateQuiz) {
     return <BarLoader className="mt-4" width={"100%"} color="gray" />;
   }
+
+  
 
   if (!quizData?.questions || !Array.isArray(quizData?.questions) || quizData?.questions.length === 0) {
     return (
@@ -125,8 +137,10 @@ function QuizComponent() {
   };
 
 
+
   return (
-    <div>
+    <React.Fragment>
+      
       <Card className="mx-2 w-full">
         <CardHeader>
           <CardTitle>
@@ -191,7 +205,7 @@ function QuizComponent() {
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </React.Fragment>
   )
 }
 
@@ -248,7 +262,7 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
   const finishQuiz = async () => {
     let score = calculateScore()
     try {
-      await saveQuizFun(customQuizJSON?.questions, answers, score,true);
+      await saveQuizFun(customQuizJSON?.questions, answers, score, true);
     } catch (error: any) {
       toast.error(error.message || error)
       console.log('Error during the save quiz record :', error)
@@ -280,12 +294,12 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
     }
   }
 
-  
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds} Minute`;
-    
+
   }
 
   useEffect(() => {
@@ -300,7 +314,7 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
             finishQuiz()
             return 0
           }
-          return prevTime -1 ;
+          return prevTime - 1;
         })
       }, 1000)
     }
@@ -327,7 +341,16 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
   };
 
 
-
+  useEffect(() => {
+    const handleRefreshPage = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
+    }
+    window.addEventListener('beforeunload', handleRefreshPage)
+    return () => {
+      window.removeEventListener('beforeunload', handleRefreshPage)
+    }
+  }, [customQuizJSON])
 
   return (
     <div>
@@ -411,7 +434,7 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
 
 
 const Quiz: React.FC<Props> = ({ customInterviewData, setCustomInterviewData }) => {
- 
+
   if (customInterviewData) {
     return (
       <CustomQuizComponent
