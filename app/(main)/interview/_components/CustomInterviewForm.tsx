@@ -171,7 +171,7 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
                 <DialogTrigger asChild>
                     {!customInterviewData &&
                         <Button type='button' variant={'outline'} className='cursor-pointer flex items-center'>
-                            Start New Custom Quiz
+                            Create Custom Quiz
                         </Button>
                     }
                 </DialogTrigger>
