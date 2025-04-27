@@ -69,6 +69,8 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
   })
 
 
+
+
   const messageWatch = watch('message')
   function onSubmit() {
     const msg = getValues("message").trim();
@@ -184,7 +186,9 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
 </div>
 : <div className="flex flex-col items-center justify-center h-full w-full">
 <Lottie
+speed={0.8}
 options={defaultOptions}/> 
+
 
 </div> 
 }
@@ -209,7 +213,7 @@ options={defaultOptions}/>
               })} placeholder="Type your message..." className="flex-1" /> */}
               <Textarea 
                autoComplete="off"
-               spellCheck="true"
+               spellCheck
                onKeyUp={(e) => {
                  if (e.key.toLowerCase() === 'enter' && !e.shiftKey) {
                    handleSubmit(onSubmit)()
@@ -221,7 +225,9 @@ options={defaultOptions}/>
                    value: 2,
                    message: 'Message must be at least 2 character long',
                  }
-                })} className="max-h-8 resize-none overflow-y-auto flex-1" placeholder="Type your message here..."   
+                })} className="max-h-8 resize-none overflow-y-auto flex-1" placeholder={
+                  !messages.length ? "Kickstart your first chat!": 'Type your message...'
+                }   
               />
 
             <Button
