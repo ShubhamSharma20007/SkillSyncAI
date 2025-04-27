@@ -27,7 +27,8 @@ export default function HeroSection() {
       <div className=' space-y-6 text-center'>
       <div className='space-y-6 mx-auto'>
         <h1 className='gradient-title text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl'>Your Personal AI <span>
-        <span className="">
+          Assistant
+        {/* <span className="">
         <h1 className="max-w-2xl text-center text-5xl leading-snug inline-block">
         <span className="relative gradient-title text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl">
           Assistant
@@ -51,7 +52,7 @@ export default function HeroSection() {
         </span>{" "}
  
       </h1>
-      </span>
+      </span> */}
           </span> for
         <br />
         Professional Success
