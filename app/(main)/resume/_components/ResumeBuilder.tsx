@@ -111,11 +111,10 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     }
   }, [formValues, activeTab, initialResumeContent]);
 
-  // Define the onSubmit function to save the resume
   async function onSubmit(data: any) {
     const formattedContent = previewContent
-        .replace(/\n/g, "\n") // Normalize newlines
-        .replace(/\n\s*\n/g, "\n\n") // Normalize multiple newlines to double newlines
+        .replace(/\n/g, "\n")
+        .replace(/\n\s*\n/g, "\n\n")
         .trim();
 
     try {
@@ -139,20 +138,49 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
     setIsGenerating(true);
   
     try {
-      const element = document.getElementById("resume-pdf");
+      const element = document.getElementById("resume-pdf") as HTMLDivElement;
+      
+  
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const opt = {
-        margin: [15, 15, 15, 15],
+        margin: [15,15], 
         filename: "resume.pdf",
-        enableLinks:true,
+        enableLinks: true,
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          letterRendering: true
+        },
+        jsPDF: { 
+          unit: "mm", 
+          format: "a4", 
+          orientation: "portrait",
+          compress: true,
+          precision: 16
+        },
+        pagebreak: { 
+          mode: ['avoid-all', 'css', 'legacy'],
+          before: '.page-break-before',
+          after: '.page-break-after',
+          avoid: ['img', 'table', 'strong', 'h3', 'h4']
+        },
+        fontFaces: [
+          {
+            family: 'Roboto',
+            style: 'normal'
+          }
+        ]
       };
 
       await html2pdf().set(opt).from(element).save();
+      
+      toast.success("PDF generated successfully!");
     } catch (error) {
       console.error("PDF generation error:", error);
+      toast.error("Failed to generate PDF. Please try again.");
     } finally {
       setIsGenerating(false);
     }

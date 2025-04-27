@@ -38,7 +38,8 @@ const ResumeTemplates: React.FC<Props> = ({ formValues ,setPreviewContent}) => {
 
   function applyCustomResumeTemplate(idx:number){
     const { contactInfo, summary, skills, experience, education, projects } = formValues;
-    if(contactInfo.name ||contactInfo.email || contactInfo.mobile || !summary.trim().length || !skills.trim().length) toast.warning('Fill in the essential form fields to build your resume.')
+    console.log(!contactInfo.name ||!contactInfo.email || !contactInfo.mobile || !summary.trim().length || !skills.trim().length)
+    if(!contactInfo.name ||!contactInfo.email || !contactInfo.mobile || !summary.trim().length || !skills.trim().length) toast.warning('Fill in the essential form fields to build your resume.')
     let templateInstance = new Templates(formValues)
     switch (idx) {
       case 1:
@@ -53,6 +54,9 @@ const ResumeTemplates: React.FC<Props> = ({ formValues ,setPreviewContent}) => {
       case 4:
         setPreviewContent(templateInstance.fourthTemplate().trim() as string)
         break;
+        case 5:
+        setPreviewContent(templateInstance.fifthTemplate().trim() as string)
+          break;
       default:
         throw new Error('Invalid template index')
     }
@@ -70,7 +74,7 @@ const ResumeTemplates: React.FC<Props> = ({ formValues ,setPreviewContent}) => {
           <SheetTitle className='text-xl font-bold'>Custom Templates</SheetTitle>
           <div className='grid grid-cols-2 gap-4 mt-5 '>
            {
-            Array.from({length:4}).map((_,i)=> <Card
+            Array.from({length:5}).map((_,i)=> <Card
             key={i}
             onClick={()=>{
               applyCustomResumeTemplate(i+1)
