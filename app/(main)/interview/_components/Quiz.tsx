@@ -365,7 +365,7 @@ function CustomQuizComponent({ customQuizJSON, setCustomQuizJSON }: { customQuiz
 
   return (
     <div>
-      <Card className="mx-2 w-full">
+      <Card className="mx-0 md:mx-2 w-full">
         <CardHeader>
           <CardTitle className='flex justify-between items-center'>
             <div>

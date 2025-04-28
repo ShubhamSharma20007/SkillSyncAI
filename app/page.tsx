@@ -128,7 +128,7 @@ let aiChats=[];
         <div className=" mx-auto py-24 background rounded-t-3xl">
           <div className="flex flex-col items-center justify-center space-y-4 text-center text-3xl max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl md:text-5xl">Ready to Accelerate Your Career? </h2>
-            <p className="mx-auto max-w-[600px] text-primary-foreground/90 font-medium md:text-xl">Join thousands of professionals whi are advancing theri careers with AI-powered gudiance.</p>
+            <p className="mx-auto max-w-[600px] text-primary-foreground/90 text-lg font-medium md:text-xl">Join thousands of professionals whi are advancing theri careers with AI-powered gudiance.</p>
           <Link href="/dashboard" passHref>
           <Button
           size={'lg'}
