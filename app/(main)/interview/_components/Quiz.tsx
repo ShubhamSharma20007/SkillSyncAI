@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFetch } from '@/hooks/user-fetch'
-import saveQuizResult, { generateQuiz } from '@/services/interview'
+import saveQuizResult from '@/services/interview'
 import React, { useEffect, useRef, useState } from 'react'
 import { BarLoader } from 'react-spinners'
 import { Label } from "@/components/ui/label"
@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import QuizResult from './QuizResult'
 import { Loader2, Terminal } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
+import axios, { AxiosResponse } from 'axios'
+import { useAuth } from '@clerk/nextjs'
 
 interface Props {
   customInterviewData: any;
@@ -22,12 +24,30 @@ function QuizComponent() {
   const [answers, setAnswers] = React.useState<string[]>([])
   const [correctAnser, setCorrectAnswer] = React.useState<string[]>([])
   const [showExplaination, setShowExplanation] = React.useState(false)
-  const {
-    loading: isGenerateQuiz,
-    data: quizData,
-    setData:setQuizData,
-    fn: generateQuizFn
-  } = useFetch(generateQuiz)
+  const [isGenerateQuiz,setIsGenerateQuiz]=useState(false)
+  const [quizData,setQuizData]=useState<any>([])
+  const { userId } = useAuth()
+  // const {
+  //   loading: isGenerateQuiz,
+  //   data: quizData,
+  //   setData: setQuizData,
+  //   fn: generateQuizFn
+  // } = useFetch()
+
+  async function generateQuizFn(id:string){
+    setIsGenerateQuiz(true)
+   try {
+    const response= await axios.post('/api/interview', { userId:id })
+    const res = await response.data;
+    setQuizData(res)
+    setIsGenerateQuiz(false)
+    return res
+   } catch (error:any) {
+    console.log(error.message || error)
+   }finally{
+    setIsGenerateQuiz(false)
+   }
+  }
 
   const {
     loading: savingQuizResult,
@@ -41,11 +61,11 @@ function QuizComponent() {
       setAnswers(Array(quizData?.questions.length).fill(null))
     }
   }, [quizData]);
-  useEffect(()=>{
-    if(resultData){
+  useEffect(() => {
+    if (resultData) {
       setQuizData(null)
     }
-  },[resultData])
+  }, [resultData])
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers]
     newAnswers[currentQuestion] = answer
@@ -86,13 +106,13 @@ function QuizComponent() {
       e.preventDefault();
       e.returnValue = 'During the quiz, you will lose your progress. Are you sure you want to leave?';
     }
-    
+
     const shouldWarnOnRefresh = quizData?.questions?.length && !resultData;
-    
+
     if (shouldWarnOnRefresh) {
       window.addEventListener('beforeunload', handleRefreshPage);
     }
-    
+
     return () => {
       window.removeEventListener('beforeunload', handleRefreshPage);
     }
@@ -103,7 +123,7 @@ function QuizComponent() {
     setCurrentQuestion(0)
     setAnswers(Array(quizData?.questions.length).fill(null))
     setShowExplanation(false)
-    generateQuizFn()
+    generateQuizFn(userId!)
     setResultData(null)
   }
   if (resultData) {
@@ -118,7 +138,7 @@ function QuizComponent() {
     return <BarLoader className="mt-4" width={"100%"} color="gray" />;
   }
 
-  
+
 
   if (!quizData?.questions || !Array.isArray(quizData?.questions) || quizData?.questions.length === 0) {
     return (
@@ -133,7 +153,9 @@ function QuizComponent() {
           </p>
         </CardContent>
         <CardFooter>
-          <Button onClick={generateQuizFn} className="w-full">
+          <Button onClick={()=>{
+            generateQuizFn(userId!)
+          }} className="w-full">
             Start Quiz
           </Button>
         </CardFooter>
@@ -151,7 +173,7 @@ function QuizComponent() {
 
   return (
     <React.Fragment>
-      
+
       <Card className="mx-2 w-full">
         <CardHeader>
           <CardTitle>

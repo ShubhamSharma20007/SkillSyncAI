@@ -1,5 +1,5 @@
 import axios from "axios"
-
+//  this is realtime communicaiton
 export async function GET(req: Request) {
     try {
         const r = await fetch("https://api.openai.com/v1/realtime/sessions", {

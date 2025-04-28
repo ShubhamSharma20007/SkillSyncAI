@@ -35,7 +35,6 @@ import {
 import { z } from 'zod'
 import { industries } from '@/data/industries'
 import { useFetch } from '@/hooks/user-fetch'
-import { generateCustomQuiz } from '@/services/interview'
 import Quiz from './Quiz'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -88,16 +87,13 @@ interface Props {
     customInterviewData: any,
     setCustomInterviewData: React.Dispatch<React.SetStateAction<any>>;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    loading:boolean
 }
 
-const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomInterviewData,setLoading }) => {
+const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomInterviewData,setLoading,loading }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedIndustry, setSelectedIndustry] = React.useState<any>(null);
-    const {
-        data: customQuizData,
-        loading,
-        fn: customQuizFN
-    } = useFetch(generateCustomQuiz)
+
     const { control,
         handleSubmit,
         watch,
@@ -170,7 +166,9 @@ const CustomInterviewForm: React.FC<Props> = ({ customInterviewData, setCustomIn
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
                     {!customInterviewData &&
-                        <Button type='button' variant={'outline'} className='cursor-pointer flex items-center'>
+                        <Button
+                        disabled={loading}
+                        type='button' variant={'outline'} className='cursor-pointer flex items-center'>
                             Create Custom Quiz
                         </Button>
                     }

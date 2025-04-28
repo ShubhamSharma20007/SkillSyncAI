@@ -54,7 +54,7 @@ export default function MockInterview() {
           </div>
         </div>
         <div className='mt-5 sm:mt-0'>
-          <CustomInterviewForm setCustomInterviewData={setCustomInterviewData} customInterviewData={customInterviewData} setLoading={setLoading} />
+          <CustomInterviewForm setCustomInterviewData={setCustomInterviewData} customInterviewData={customInterviewData} setLoading={setLoading} loading={loading} />
         </div>
       </div>
       {
