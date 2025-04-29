@@ -1,4 +1,5 @@
 import generativeModel from "@/lib/gemini"
+import dbConnect from "@/lib/mongodb";
 import { aiModel } from "@/lib/opne-ai";
 import userModel from "@/models/user.model";
 import { NextResponse } from "next/server";
@@ -7,6 +8,7 @@ import { NextResponse } from "next/server";
 export const  maxDuration = 60;
 
 export async function POST(request: Request){
+        await dbConnect();      
         const body = await request.json()
         const {userId} = body;
         const user = await userModel.findOne({ clerkUserId: userId });

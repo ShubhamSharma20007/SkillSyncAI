@@ -1,4 +1,5 @@
 "use client"
+//  this is hold stage need to KEY OPENAI
 import { Button } from '@/components/ui/button'
 import axios from 'axios';
 import { Mic, PauseCircle, Square } from 'lucide-react'
