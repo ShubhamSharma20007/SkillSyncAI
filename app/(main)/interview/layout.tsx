@@ -1,18 +1,17 @@
-import React, { Suspense } from "react"
-import { BarLoader } from "react-spinners"
-
-export default function InterviewLayout({children}:{children:React.ReactNode}) {
+import { Suspense } from "react";
+import { BarLoader } from "react-spinners";
+export default function ResumeLayout({ children }: { children: React.ReactNode }) {
   return (
-   <div className="px-5 w-full">
-   <Suspense
+    <div className="px-5 w-full">
+      <Suspense
         fallback={
-          <div className="flex justify-center items-center h-64">
-            <BarLoader color="gray"  width={'50%'} loading={true}/>
+          <div className="fixed inset-0 flex justify-center items-center  z-50">
+            <BarLoader color="gray" width={'50%'} loading={true} />
           </div>
         }
       >
         {children}
       </Suspense>
-   </div>
+    </div>
   )
 }

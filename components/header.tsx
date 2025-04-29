@@ -9,7 +9,7 @@ import {
 } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarsIcon, Moon, Sun } from 'lucide-react'
+import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarsIcon, Moon, Sun, Bot } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,6 +75,12 @@ export default function Header() {
                   <Link href={'/interview'} className='flex items-center gap-2'>
                     <GraduationCap className='h-4 w-4' />
                     <span>Interview Prep.</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={'/ai-preparation'} className='flex items-center gap-2'>
+                    <Bot className='h-4 w-4' />
+                    <span>Prep. with AI</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

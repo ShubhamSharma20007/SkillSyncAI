@@ -155,34 +155,6 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
           {/* <ChatBotResetChatDialog /> */}
         </CardHeader>
         <CardContent className="h-[50vh] overflow-y-auto " ref={chatContainer}>
-          {/* {messages.length >0 ? 
-        <div className="space-y-4">
-        {messages.map((message, index) => (
-          (message.content || (message.role === "assistant" && streaming && index === messages.length - 1)) && (
-            <div
-              key={index}
-              className={cn(
-                "flex w-max max-w-[90%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                message.role === "user"
-                  ? "ml-auto bg-primary text-primary-foreground"
-                  : "bg-muted"
-              )}
-            >
-              {message.role === "assistant" && streaming && index === messages.length - 1 && !hasStreamingMessageRef.current ? (
-                <Loader />
-              ) : (
-                handlFormatMessage(message)
-              )}
-            </div>
-          )
-        ))}
-      </div>:
-      <div className="flex flex-col items-center justify-center h-full w-full">
-      <Lottie
-      options={defaultOptions}/> 
-      
-      </div> 
-        } */}
   {messages.length >0 ? 
 <div className="space-y-4">
 {messages.map((message, index) => {

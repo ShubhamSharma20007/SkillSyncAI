@@ -53,7 +53,7 @@ export default async  function RootLayout({
           >
               
           <Header/>
-           <main className="min-h-screen">
+           <main className="min-h-[calc(100vh-120px)]">
             <SocketProvider>
             {children}
            </SocketProvider>
