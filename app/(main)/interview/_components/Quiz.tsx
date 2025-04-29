@@ -39,6 +39,7 @@ function QuizComponent() {
    try {
     const response= await axios.post('/api/interview', { userId:id })
     const res = await response.data;
+    console.log(res,1)
     setQuizData(res)
     setIsGenerateQuiz(false)
     return res

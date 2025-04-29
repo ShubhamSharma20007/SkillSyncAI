@@ -12,9 +12,9 @@ async function generativeModel(contents:string) {
     console.log(response.text)
    console.log('--------------------------- GEMINI RES END --------------------------------')
     return response.text
-  } catch (error) {
+  } catch (error:any) {
     console.log('Error in generativeModel:', error);
-    return null;
+    return error?.message || error?.error?.message;
   }
 }
 
