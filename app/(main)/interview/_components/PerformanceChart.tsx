@@ -34,7 +34,6 @@ useEffect(()=>{
 
 },[assessments])
 
-console.log(chartData)
   return (
     <Card className='bg-background'>
     <CardHeader>

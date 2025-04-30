@@ -80,7 +80,6 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
     startTransition(async () => {
       try {
         const userData = await getUser()
-        console.log(userData)
         if (userData) {
           if (userData.industry) {
             const [industryId, subIndustryValue] = userData.industry.industry.split('-')
@@ -116,7 +115,7 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
         ...value,
         industry: formatedIndustry
       })
-    console.log(updateUserData)
+  
      if(updateUserData){
       toast.success('Profile updated successfully')
       router.back()

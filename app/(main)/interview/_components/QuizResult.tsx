@@ -7,7 +7,6 @@ import { CheckCircle2, Trophy, XCircle } from 'lucide-react'
 import React from 'react'
 
 export default function QuizResult({ result, onStartNew }: { result: any, onStartNew: () => void }) {
-console.log(result)
   return (
     <div className="mx-auto">
       <h1 className="flex items-center gap-2 text-3xl gradient-title">

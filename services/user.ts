@@ -105,7 +105,6 @@ export const getUser = async() => {
 }
 
 export const updateUserDetails = async (data: any,formatedIndustry:string) => {
-    console.log(data)
     try {
         const { userId } = await auth();  
         if (!userId) throw new Error("id not found");
