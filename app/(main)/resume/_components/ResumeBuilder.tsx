@@ -102,7 +102,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   useEffect(() => {
     if (activeTab === "edit") {
       const newContent = getCombineContent();
-      console.log({newContent})
+     
       if (newContent) {
         setPreviewContent(newContent);
       } else if (initialResumeContent) {
