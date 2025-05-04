@@ -28,6 +28,7 @@ import Loader from "@/components/Loader"
 import { useUser } from "@clerk/nextjs";
 import Lottie from 'react-lottie';
 import * as animationData from '../../../../lottie/emptyChat.json'
+import { toast } from "sonner"
 type VisibityDispatcherProps = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>,
   visible: boolean
@@ -60,7 +61,7 @@ export function ChatBotResetChatDialog() {
 
 export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProps) {
   const { user } = useUser();
-  const { isConnected, hasStreamingMessageRef, messages, sendMessage, streaming } = useSocket();
+  const { isConnected, hasStreamingMessageRef, messages, sendMessage, streaming ,error} = useSocket();
   let chatContainer = React.useRef<HTMLDivElement | null>(null)
   const { watch, register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
     defaultValues: {
@@ -78,6 +79,12 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
     sendMessage(msg)
     reset();
   }
+
+  useEffect(()=>{
+    if(error?.length){
+      toast.error(error)
+    }
+  },[error])
 
   useEffect(() => {
     if (chatContainer.current) {

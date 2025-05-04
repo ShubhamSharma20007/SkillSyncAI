@@ -18,6 +18,7 @@ interface MessageContextType {
   sendMessage: (message: string) => void;
   hasStreamingMessageRef: React.MutableRefObject<boolean>;
   streaming:boolean;
+  error:string | null;
 }
 
 const SocketContext = createContext<MessageContextType>({
@@ -28,13 +29,14 @@ const SocketContext = createContext<MessageContextType>({
   sendMessage: () => {},
   hasStreamingMessageRef:{current:false} as React.MutableRefObject<boolean>,
   streaming: false,
+  error:null
   
 
 });
 const URL ={
   production:'https://skillsynx-socket-backend-1.onrender.com',
   development:'https://skillsynx-socket-backend-1.onrender.com'
-  // development:'http://localhost:4000' // socket server url
+  // development:'http://localhost:4000' // socket local server url
 } as const
 
 const env = (process.env.NODE_ENV ?? 'development') as keyof typeof URL;
@@ -46,6 +48,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [error,setError]= useState<string | null>(null);
   const [streaming,setStreaming] = useState(false);
   const currentStreamRef = useRef<string>('');
   const hasStreamingMessageRef = useRef<boolean>(false);
@@ -72,7 +75,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (!hasStreamingMessageRef.current) {
           hasStreamingMessageRef.current = true;
           currentStreamRef.current = data.content
-          
+          setError(null);
           setMessages(prev => [...prev, { 
             role: data.role, 
             content: data.content 
@@ -130,6 +133,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsConnected(false);
     });
 
+    socketInstance.on('error',(err:string)=>{
+      setError(err)
+    })
+
     return () => {
       socketInstance.disconnect();
     };
@@ -167,7 +174,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       isConnected,
       sendMessage,
       hasStreamingMessageRef,
-      streaming
+      streaming,
+      error
     }}>
       {children}
     </SocketContext.Provider>
