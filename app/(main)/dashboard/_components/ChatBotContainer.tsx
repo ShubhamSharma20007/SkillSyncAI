@@ -220,10 +220,11 @@ options={defaultOptions}/>
               })} placeholder="Type your message..." className="flex-1" /> */}
               <Textarea 
                autoComplete="off"
-               disabled={streaming}
+            
                spellCheck
                onKeyUp={(e) => {
-                 if ((e.key.toLowerCase() === 'enter' && !e.shiftKey)) {
+                if(streaming && e.key.toLowerCase() == 'enter') return;
+                if ((e.key.toLowerCase() === 'enter' && !e.shiftKey)) {
                    handleSubmit(onSubmit)()
                  }
                 
