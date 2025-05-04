@@ -220,11 +220,13 @@ options={defaultOptions}/>
               })} placeholder="Type your message..." className="flex-1" /> */}
               <Textarea 
                autoComplete="off"
+               disabled={streaming}
                spellCheck
                onKeyUp={(e) => {
-                 if (e.key.toLowerCase() === 'enter' && !e.shiftKey) {
+                 if ((e.key.toLowerCase() === 'enter' && !e.shiftKey)) {
                    handleSubmit(onSubmit)()
                  }
+                
                }}
                id="message" {...register('message', {
                  required: true,
