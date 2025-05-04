@@ -112,11 +112,13 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   }, [formValues, activeTab, initialResumeContent]);
 
   async function onSubmit(data: any) {
+      if(!window || typeof window === 'undefined') return;
     const formattedContent = previewContent
         .replace(/\n/g, "\n")
         .replace(/\n\s*\n/g, "\n\n")
         .trim();
 
+    if (!formattedContent.trim().length) return toast.error("Can't save empty resume")
     try {
       await saveResumeHandler(formattedContent);
     } catch (error) {
@@ -139,8 +141,6 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
   
     try {
       const element = document.getElementById("resume-pdf") as HTMLDivElement;
-      
-  
       await new Promise(resolve => setTimeout(resolve, 500));
       
       const opt = {
@@ -301,7 +301,7 @@ const ResumeBuilder = ({ initialContent: initialResumeContent }: { initialConten
             onClick={generatePDF}
             className='cursor-pointer'
             variant="destructive"
-            disabled={isGenrating}
+            disabled={isGenrating || activeTab !== 'preview' }
           >
             {isGenrating ? (
               <>

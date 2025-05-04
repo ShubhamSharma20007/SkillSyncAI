@@ -53,7 +53,7 @@ export default function CoverLetterList({ coverLetters }:{coverLetters:any[]}) {
   }
   useEffect(()=>{
     router.refresh()
-  },[coverLetters])
+  },[])
   
   return (
     <div className="space-y-4">

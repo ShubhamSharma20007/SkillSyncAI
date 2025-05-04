@@ -6,8 +6,6 @@ import Link from 'next/link' // Import Link from Next.js, not from lucide-react
 import { getCoverLetters } from '@/services/cover-letter'
 export default async function AICoverLetter() {
   const coverLetters = await getCoverLetters()
-  
-
   return (
    <>
     <div className='container mx-auto space-y-10 py-6'>

@@ -41,7 +41,7 @@ export default function MockInterview() {
         <div>
           <Link href="/interview" className='flex  items-center'>
             <ArrowLeft size={20} />
-            <Button disabled={loading} variant="link" className="p-0 cursor-pointer">
+            <Button disabled={loading} variant="link" className="p-0 cursor-pointer ml-2">
               Back to Interview Preparation
             </Button>
           </Link>
