@@ -43,7 +43,6 @@ export async function POST(request: Request) {
       model: "gpt-4o",
       instructions: prompt,
       input: "generate the quiz questions with options and correct answer and return in pure JSON format",
-      temperature: 0.7,
     })
 
     let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();

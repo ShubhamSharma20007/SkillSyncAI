@@ -17,6 +17,10 @@ console.log("customQuizData", customQuizData)
     const timerValue = customQuizData.timerValue?.replace(/ minutes/g, "");
   
 const prompt = `
+# Instructions:
+
+* Number of questions: ${customQuizData.questionCount}\n\n
+
 Generate ${customQuizData.questionCount} challenging ${customQuizData.difficultyLevel}-level interview questions for ${customQuizData.experienceLevel} ${industryTag} professionals${skills ? ` with ${skills} expertise` : ''}.
 
 Requirements:
@@ -54,6 +58,8 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
   ]
 }
 `;
+
+console.log({prompt})
     // const response = await generativeModel(prompt);
     // console.log(response);
     // let cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
@@ -61,7 +67,6 @@ Return the data in **pure JSON format**, exactly as shown below. Do not include 
         model: "gpt-4o",
         instructions: prompt,
         input:"generate the quiz questions with options and correct answer and return in pure JSON format",
-        temperature: 0.7,
         })
       
         let cleanedText = response.output_text?.replace(/```(?:json)?\n?/g, "").trim();
