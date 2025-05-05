@@ -14,7 +14,7 @@ const ChatBotComponent = dynamic(()=>import('./ChatBotContainer').then(mod=>mod.
 const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
   const user = useAuth()
   const [visible, setVisible] = React.useState(false)
-  const { setMessages } = useSocket()
+  const { setMessages,isConnected } = useSocket()
   function showChatBotContainer(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const element = (e.target as HTMLButtonElement)
     if (!element) return 'element not found'
@@ -37,6 +37,7 @@ const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
   return (
     <>
       <Toggle
+      disabled={!isConnected}
         onClick={handleClick}
         variant="outline"
         aria-label="Chatbot"

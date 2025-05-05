@@ -21,13 +21,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { useSocket } from "@/context/SocketContext"
 import { useForm } from "react-hook-form"
 import Loader from "@/components/Loader"
 import { useUser } from "@clerk/nextjs";
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Lottie from 'react-lottie';
 import * as animationData from '../../../../lottie/emptyChat.json'
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import { toast } from "sonner"
 type VisibityDispatcherProps = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>,
@@ -92,22 +93,42 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
     }
   }, [messages])
 
-  function handlFormatMessage(message: any) {
-    if(!message.content) return null;
 
-    const content = message.content.replace(/\\n/g, "\n");
-    return content.split("\n").map((line:string, lineIndex:number) => {
-      const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1 </strong> ');
-      
-      return (
-        <div
-          key={lineIndex}
-          className={cn("flex items-center space-x-2")}
-        >
-          <span dangerouslySetInnerHTML={{ __html: formattedLine }} />
+  function formatMessage(content:string) {
+    if (!content) return null;
+    const parts = content.split(/(\`\`\`[\s\S]*?\`\`\`)/g);
+    return parts.map((part, i) => {
+      const codeMatch = part.match(/^\`\`\`(?:([\w-]+)?\n)?([\s\S]*?)\n?\`\`\`$/);
+      if (codeMatch) {
+        const language = codeMatch[1] || '';
+        const code = codeMatch[2].trim();
+        return (
+          <div key={i} className="w-full overflow-x-auto rounded-lg border bg-gray-100 px-2">
+          <SyntaxHighlighter style={docco} language={language}>{code}</SyntaxHighlighter>
         </div>
-      );
+        );
+      } else {
+        return part.split("\n").map((line:string, lineIndex:number) => {
+          const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          return (
+            <div
+            
+              key={`${i}-${lineIndex}`}
+              className={cn("flex items-center space-x-2 w-full")}
+            >
+              <span className="w-full" dangerouslySetInnerHTML={{ __html: formattedLine }} />
+            </div>
+          );
+        });
+      }
     });
+  }
+  
+
+  function handlFormatMessage(message:any) {
+    if (!message.content) return null;
+    const content = message.content.replace(/\\n/g, "\n");
+    return formatMessage(content);
   }
   const defaultOptions = {
     loop: true,
