@@ -36,8 +36,9 @@ const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
   }, [user?.userId])
   return (
     <>
-      <Toggle
-      disabled={!isConnected}
+      {
+        isConnected && <Toggle
+
         onClick={handleClick}
         variant="outline"
         aria-label="Chatbot"
@@ -50,6 +51,7 @@ const Chatbot = ({ aiChats }: { aiChats: AiChatInterface[] }) => {
           <Bot className='w-10 h-10 text-white ' />
         )}
       </Toggle>
+      }
       {
         visible && <ChatBotComponent setVisible={setVisible} visible={visible} />
       }

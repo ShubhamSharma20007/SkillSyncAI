@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useFetch } from '@/hooks/user-fetch';
 import { useAuth } from '@clerk/nextjs';
@@ -53,14 +53,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const currentStreamRef = useRef<string>('');
   const hasStreamingMessageRef = useRef<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
     
     const socketInstance = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      timeout: 20000
+      timeout: 20000,
+
     });
     
     setSocket(socketInstance);
