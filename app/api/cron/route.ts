@@ -3,10 +3,10 @@ import industryInsightModel from "@/models/industryInsight.model";
 
 
 export async function GET(request: Request) {
-    try {
-                    const allInsign = await industryInsightModel.find();
-                    for(let {industry} of allInsign){
-                        const prompt = `
+  try {
+    const allInsign = await industryInsightModel.find();
+    for (let { industry } of allInsign) {
+      const prompt = `
                         Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
                         {
                           "salaryRanges": [
@@ -25,23 +25,24 @@ export async function GET(request: Request) {
                         Growth rate should be a percentage.
                         Include at least 5 skills and trends.
                       `;
-                   const response = await generativeModel(prompt);
-                   const cleanText = response?.replace(/```(?:json)?\n?/g, "").trim();
-                   const data = JSON.parse(JSON.stringify(cleanText));
-                    // update the database with the new data
-                    await industryInsightModel.updateOne({
-                        where: { industry },
-                        data: {
-                          ...data,
-                          lastUpdated: new Date(),
-                          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                        },
-                      });
-                    }
-                    
-                    return  new Response('Cron Job SuccessFully');
-         
-                } catch (error :any) {
-                    throw new Error(`Error updating industry insight for industry: ${error.message || error}`);
-                }
+      const response = await generativeModel(prompt);
+      const cleanText = response?.replace(/```(?:json)?\n?/g, "").trim();
+      const data = JSON.parse(JSON.stringify(cleanText));
+      // update the database with the new data
+      await industryInsightModel.updateOne(
+        {industry},
+        {
+          $set:{
+          ...data,
+          lastUpdated: new Date(),
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          }
+        }
+      )
+    }
+    return new Response('Cron Job SuccessFully');
+
+  } catch (error: any) {
+    throw new Error(`Error updating industry insight for industry: ${error.message || error}`);
   }
+}

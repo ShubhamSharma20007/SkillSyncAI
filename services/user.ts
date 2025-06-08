@@ -16,7 +16,7 @@ export async function updateUser(data:any){
     try {
    
         // let industryInsights = await industryInsightModel.findOne({
-        //     industry: data.industry
+        //     userId: data.industry
         // });
 
             const  insights = await generateAIInsights(data.industry);
@@ -104,22 +104,54 @@ export const getUser = async() => {
     }
 }
 
-export const updateUserDetails = async (data: any,formatedIndustry:string) => {
+export const updateUserDetails = async (data: any) => {
     try {
+        await updateUser(data)
+    } catch (error) {
+        
+    }
+    try {
+        console.log(data, 122);
         const { userId } = await auth();  
         if (!userId) throw new Error("id not found");
+
         await dbConnect();
+
         const updatedUser = await userModel.findOneAndUpdate(
             { clerkUserId: userId },
-            { $set: data ,
-            industry:formatedIndustry
+            {
+                $set: {
+                    skills: data.skills,
+                    experience: data.experience,
+                    bio: data.bio,
+                },
             },
             { new: true }
         );
+
         if (!updatedUser) throw new Error("User not found");
-        return true
+
+         const  insights = await generateAIInsights(data.industry);
+        const updateIndustry = await industryInsightModel.findOneAndUpdate(
+            { userId: updatedUser._id },
+            {
+                $set: {
+                 industry: data.industry,
+                ...insights as any,
+                userId: new mongoose.Types.ObjectId(updatedUser._id),
+                nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                },
+            },
+            { new: true }
+        );
+        
+        if (!updateIndustry) throw new Error("Industry not found");
+        
+
+        return true;
     } catch (error: any) {
         console.log(error);
-        throw new Error("Error updating user", error.message || error);
+        throw new Error(error.message || "Error updating user");
     }
-}
+};
+

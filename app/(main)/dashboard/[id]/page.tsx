@@ -47,11 +47,11 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter()
 
 
-  const{
-    data:updateUserData,
-    fn:updateUserFn,
-    loading:isLoading
-  }= useFetch(updateUserDetails)
+  const {
+    data: updateUserData,
+    fn: updateUserFn,
+    loading: isLoading
+  } = useFetch(updateUserDetails)
 
 
   // Initialize form with React Hook Form
@@ -84,18 +84,18 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
           if (userData.industry) {
             const [industryId, subIndustryValue] = userData.industry.industry.split('-')
             setValue('industry', industryId)
-            const industry = industries.find(ind=>ind.id === industryId)
+            const industry = industries.find(ind => ind.id === industryId)
             if (industry) {
               setSelectedIndustry(industry)
               if (subIndustryValue) {
                 const formattedSubIndustry = userData.industry.industry.slice(industryId.length).split("-").join('')
-                const subIndustry = industry.subIndustries.find(ind=>ind.replace(/ /g,'').toLowerCase() === formattedSubIndustry.replace(/ /g,''))
-          
+                const subIndustry = industry.subIndustries.find(ind => ind.replace(/ /g, '').toLowerCase() === formattedSubIndustry.replace(/ /g, ''))
+
                 setValue('subIndustry', subIndustry!)
               }
             }
           }
-          
+
           // Set other form values
           if (userData.experience) setValue('experience', userData.experience)
           if (userData.skills) setValue('skills', userData.skills.join(', '))
@@ -108,24 +108,28 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
     })
   }, [id, setValue])
 
-  const onSubmit= async (value:any) => {
-      const formatedIndustry = `${value.industry}-${value.subIndustry.toLowerCase().replace(/ /g,"-")}`
+  const onSubmit = async (value: any) => {
+    const formatedIndustry = `${value.industry}-${value.subIndustry.toLowerCase().replace(/ /g, "-")}`
     try {
-     const response = await updateUserFn({
+      await updateUserFn({
         ...value,
         industry: formatedIndustry
       })
-  
-     if(updateUserData){
-      toast.success('Profile updated successfully')
-      router.back()
-      router.refresh()
-     }
     } catch (error) {
       console.error('Update profile error:', error)
       toast.error('Failed to update profile')
-    } 
+    }
   }
+
+  useEffect(() => {
+    if (updateUserData) {
+      toast.success('Profile updated successfully' ,{
+        onAutoClose:()=>{
+        router.refresh()
+        }
+      })
+    }
+  }, [updateUserData])
 
   // Loading state
   if (isPending) {
@@ -140,7 +144,7 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
     <div className='flex justify-center items-center bg-background'>
       <Card className='w-full max-w-lg mx-2'>
         <CardHeader>
-          <CardTitle className='gradient-title px-5 text-4xl'>Update Your Profile</CardTitle>
+          <CardTitle className='gradient-title px-5 text-4xl text-center'>Update Your Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
@@ -150,7 +154,7 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
                 value={watchIndustry}
                 onValueChange={(value) => {
                   setValue('industry', value)
-                  setValue('subIndustry', '') 
+                  setValue('subIndustry', '')
                   const industry = industries.find(ind => ind.id === value)
                   setSelectedIndustry(industry || null)
                 }}
@@ -245,8 +249,8 @@ const UpdateProfile = ({ params }: { params: Promise<{ id: string }> }) => {
               )}
             </div>
 
-            <Button 
-              className='w-full cursor-pointer' 
+            <Button
+              className='w-full cursor-pointer'
               type='submit'
               disabled={isLoading}
             >
