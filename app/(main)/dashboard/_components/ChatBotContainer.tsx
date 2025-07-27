@@ -109,14 +109,16 @@ export function ChatBotContainer(VisibityDispatcherProps: VisibityDispatcherProp
         );
       } else {
         return part.split("\n").map((line:string, lineIndex:number) => {
-          const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        let formattedLine = line.match(/\*\*(.*?)\*\*/g)
+        ? line.replace(/\*\*(.*?)\*\*/g, '<strong style="font-size:15px;">$1</strong>'): line;
+        const match = formattedLine.match(/^###\s?(.+):\s*$/);
+        formattedLine = match ? `<strong style="font-size:19px;">${match[1]} :</strong>` : formattedLine;
           return (
             <div
-            
               key={`${i}-${lineIndex}`}
               className={cn("flex items-center space-x-2 w-full")}
             >
-              <span className="w-full" dangerouslySetInnerHTML={{ __html: formattedLine }} />
+              <span className="w-full " dangerouslySetInnerHTML={{ __html: formattedLine }} />
             </div>
           );
         });
