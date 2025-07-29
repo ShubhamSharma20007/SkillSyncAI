@@ -22,6 +22,8 @@ const UserSchema = new mongoose.Schema({
     timestamps: true,
     versionKey: false
 })
-UserSchema.index({ clerkUserId: 1 }, { unique: true }); // Ensure clerkUserId is unique
+UserSchema.index({ clerkUserId: 1,email: 1 }, { unique: true }); // Ensure clerkUserId is unique
+
+
 //index for searching by email
 export default mongoose.models?.User || mongoose.model('User', UserSchema);
